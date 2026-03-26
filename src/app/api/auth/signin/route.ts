@@ -48,7 +48,13 @@ export async function POST(request: Request) {
     return NextResponse.json<ApiResponse>(
       { 
         success: true, 
-        data: userData
+        data: {
+          user: userData,
+          session: {
+            access_token: authData.session?.access_token,
+            refresh_token: authData.session?.refresh_token,
+          }
+        }
       },
       { status: 200 }
     );

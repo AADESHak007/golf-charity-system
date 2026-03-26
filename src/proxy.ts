@@ -1,7 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { logger } from '@/lib/logger';
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -57,6 +58,7 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/');
+  logger.info(`Proxy: ${request.method} ${request.nextUrl.pathname}`, { hasUser: !!user });
   const protectedRoutes = [
     '/dashboard',
     '/api/auth/me',
