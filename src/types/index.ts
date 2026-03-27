@@ -33,6 +33,7 @@ export interface Subscription {
   status: SubscriptionStatus;
   current_period_start: string;
   current_period_end: string;
+  cancel_at_period_end: boolean;
   created_at: string;
   cancelled_at: string | null;
 }

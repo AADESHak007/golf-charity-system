@@ -133,9 +133,16 @@ export async function POST(request: Request) {
         const subscription = event.data.object as Stripe.Subscription;
         await supabaseServiceRole
           .from('subscriptions')
-          .update({ status: subscription.status })
+          .update({ 
+            status: subscription.status,
+            cancel_at_period_end: subscription.cancel_at_period_end
+          })
           .eq('stripe_subscription_id', subscription.id);
-        logger.info('Subscription updated', { id: subscription.id, status: subscription.status });
+        logger.info('Subscription updated', { 
+            id: subscription.id, 
+            status: subscription.status,
+            cancel_at_period_end: subscription.cancel_at_period_end
+        });
         break;
       }
 

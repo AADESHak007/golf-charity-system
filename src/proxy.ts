@@ -74,13 +74,13 @@ export default async function proxy(request: NextRequest) {
   if (!user && isProtectedPath) {
     if (isApiRoute) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
-    
+
     const url = request.nextUrl.clone();
-    url.pathname = '/signin';
+    url.pathname = '/auth'; // ← our actual auth page
     url.searchParams.set('redirectedFrom', request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
