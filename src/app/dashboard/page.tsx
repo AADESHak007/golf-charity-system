@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
+import { UserCharityList } from '@/components/charities/UserCharityList';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -11,6 +12,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
   const [cancelMsg, setCancelMsg] = useState('');
+  const [totalAllocation, setTotalAllocation] = useState(10); // Initial fallback
   const router = useRouter();
   const params = useSearchParams();
   const isSuccess = params.get('success') === 'true';
@@ -19,10 +21,12 @@ export default function DashboardPage() {
     Promise.all([
       fetch('/api/auth/me').then(r => r.json()),
       fetch('/api/subscriptions/me').then(r => r.json()),
-    ]).then(([me, sub]) => {
+      fetch('/api/user/charities').then(r => r.json()),
+    ]).then(([me, sub, charities]) => {
       if (!me.success) { router.push('/auth'); return; }
       setUser(me.data);
       if (sub.success) setSubscription(sub.data);
+      if (charities.success) setTotalAllocation(charities.data.total_allocation);
       setLoading(false);
     });
   }, []);
@@ -86,45 +90,73 @@ export default function DashboardPage() {
             Welcome back, <span className="gradient-text">{user?.name?.split(' ')[0] || 'Player'}</span> 👋
           </h1>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Profile Card */}
-            <div className="glass rounded-2xl p-6 md:col-span-2">
-              <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Profile</h2>
-              <dl className="flex flex-col gap-3">
+            <div className="glass rounded-[2rem] p-8 md:col-span-2 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-3xl pointer-events-none" />
+              <h2 className="text-xs font-black text-gray-450 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                Player Profile
+              </h2>
+              <dl className="flex flex-col gap-4">
                 {[
-                  { label: 'Name', value: user?.name },
-                  { label: 'Email', value: user?.email },
-                  { label: 'Role', value: user?.role },
-                  { label: 'Charity Contribution', value: `${user?.charity_perc ?? 10}%` },
+                  { label: 'Full Name', value: user?.name },
+                  { label: 'Registered Email', value: user?.email },
+                  { label: 'Platform Role', value: user?.role },
                 ].map(({ label, value }) => (
-                  <div key={label} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-                    <dt className="text-sm text-gray-500">{label}</dt>
-                    <dd className="text-sm font-medium text-gray-200">{value || '—'}</dd>
+                  <div key={label} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0 group/row">
+                    <dt className="text-sm font-medium text-gray-500 group-hover:text-gray-400 pb-1 transition-colors">{label}</dt>
+                    <dd className="text-sm font-bold text-gray-100">{value || '—'}</dd>
                   </div>
                 ))}
               </dl>
             </div>
 
-            {/* Charity % Ring */}
-            <div className="glass rounded-2xl p-6 flex flex-col items-center justify-center text-center">
-              <div className="relative mb-3">
-                <svg width="90" height="90" viewBox="0 0 90 90">
-                  <circle cx="45" cy="45" r="38" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+            {/* Charity Impact Ring */}
+            <div className="glass rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-2xl relative bg-zinc-900 overflow-hidden">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 blur-2xl pointer-events-none" />
+              <div className="relative mb-4 group">
+                <svg width="120" height="120" viewBox="0 0 120 120" className="transform -rotate-90">
+                  <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="12" />
                   <circle
-                    cx="45" cy="45" r="38" fill="none" stroke="#22c55e" strokeWidth="8"
-                    strokeDasharray={`${2 * Math.PI * 38}`}
-                    strokeDashoffset={`${2 * Math.PI * 38 * (1 - (user?.charity_perc ?? 10) / 100)}`}
+                    cx="60" cy="60" r="54" fill="none" stroke="url(#emerald-grad)" strokeWidth="12"
+                    strokeDasharray={`${2 * Math.PI * 54}`}
+                    strokeDashoffset={`${2 * Math.PI * 54 * (1 - (totalAllocation || 0) / 100)}`}
                     strokeLinecap="round"
-                    transform="rotate(-90 45 45)"
+                    className="transition-all duration-1000 ease-out"
                   />
+                  <defs>
+                    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                       <stop offset="0%" stopColor="#10b981" />
+                       <stop offset="100%" stopColor="#34d399" />
+                    </linearGradient>
+                  </defs>
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xl font-bold text-green-400">{user?.charity_perc ?? 10}%</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-3xl font-black text-emerald-400 tracking-tight">{totalAllocation || 0}%</span>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/50">Total Impact</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-500 leading-tight">Charity<br />Contribution</p>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Charity Contribution</p>
+                <p className="text-[9px] font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/10">Combined Allocation</p>
+              </div>
             </div>
           </div>
+
+          {/* Detailed Charity Impact Section */}
+          <section className="mb-12">
+             <div className="flex items-center justify-between mb-8 px-2">
+                <div className="space-y-1">
+                   <h3 className="text-2xl font-black text-white tracking-tight">Your Impact Snapshot</h3>
+                   <p className="text-xs text-zinc-500 font-medium">Manage your currently supported missions and allocations.</p>
+                </div>
+             </div>
+             
+             <UserCharityList 
+                subscriptionPrice={subscription?.price_pence || 2000} 
+             />
+          </section>
 
           {/* Subscription Card */}
           <div className="glass rounded-2xl p-6 mb-6">

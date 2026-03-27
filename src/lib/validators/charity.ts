@@ -1,20 +1,19 @@
 import { z } from 'zod';
 
-export const SelectCharitySchema = z.object({
-  charityId: z.string({
-    message: "Charity ID is required",
-  }).uuid("Invalid Charity ID format"),
-});
-
-export const CharityPercSchema = z.object({
-  charity_perc: z
-    .number({
-      message: "Percentage is required",
-    })
+export const AddCharitySchema = z.object({
+  charityId: z.string().uuid({ message: 'Invalid charity ID' }),
+  allocation_perc: z.number()
     .int()
-    .min(10, "Minimum contribution is 10%")
-    .max(50, "Maximum contribution is 50%"),
+    .min(10, { message: 'Minimum allocation is 10%' })
+    .max(50, { message: 'Maximum allocation is 50%' }),
 });
 
-export type SelectCharityInput = z.infer<typeof SelectCharitySchema>;
-export type CharityPercInput = z.infer<typeof CharityPercSchema>;
+export const UpdateAllocationSchema = z.object({
+  allocation_perc: z.number()
+    .int()
+    .min(10, { message: 'Minimum allocation is 10%' })
+    .max(50, { message: 'Maximum allocation is 50%' }),
+});
+
+export type AddCharityInput = z.infer<typeof AddCharitySchema>;
+export type UpdateAllocationInput = z.infer<typeof UpdateAllocationSchema>;

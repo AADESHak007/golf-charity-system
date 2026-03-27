@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { ApiResponse } from '@/types';
 
 /**
- * GET - Single charity profile by slug.
+ * GET - Single charity profile by slug with upcoming events.
  * PUBLIC ROUTE - no auth required.
  */
 export async function GET(
@@ -13,16 +13,16 @@ export async function GET(
   const { slug } = await params;
   const supabase = await createClient();
 
-  const { data: charity, error } = await supabase
+  const { data: charity, error: charityError } = await supabase
     .from('charities')
     .select('*')
     .eq('slug', slug)
     .eq('is_active', true)
     .maybeSingle();
 
-  if (error) {
+  if (charityError) {
     return NextResponse.json<ApiResponse>(
-      { success: false, error: error.message },
+      { success: false, error: charityError.message },
       { status: 500 }
     );
   }
@@ -34,8 +34,28 @@ export async function GET(
     );
   }
 
+  // Fetch upcoming events for this charity
+  const today = new Date().toISOString().split('T')[0];
+  const { data: events, error: eventsError } = await supabase
+    .from('charity_events')
+    .select('*')
+    .eq('charity_id', charity.id)
+    .eq('is_active', true)
+    .gte('event_date', today)
+    .order('event_date', { ascending: true });
+
+  if (eventsError) {
+    return NextResponse.json<ApiResponse>(
+      { success: false, error: eventsError.message },
+      { status: 500 }
+    );
+  }
+
   return NextResponse.json<ApiResponse>({
     success: true,
-    data: charity,
+    data: {
+      ...charity,
+      events: events ?? [],
+    },
   });
 }

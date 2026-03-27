@@ -3,31 +3,35 @@
 import { useState, useCallback } from 'react';
 import { CharitySearch } from '@/components/charities/CharitySearch';
 import { CharityGrid } from '@/components/charities/CharityGrid';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface Charity {
   id: string;
   name: string;
   slug: string;
   description: string;
-  image_url: string;
+  image_url: string | null;
   is_featured: boolean;
+  upcoming_events_count?: number;
 }
 
 interface CharityDirectoryClientProps {
   initialCharities: Charity[];
+  supportedIds: string[];
 }
 
-export const CharityDirectoryClient = ({ initialCharities }: CharityDirectoryClientProps) => {
-  const [charities, setCharities] = useState<Charity[]>(initialCharities);
-  const [isLoading, setIsLoading] = useState(false);
+export const CharityDirectoryClient = ({ initialCharities, supportedIds }: CharityDirectoryClientProps) => {
+  const [charities, setCharities] = useState<Charity[]>(
+    initialCharities.map(c => ({ ...c, isSupporting: supportedIds.includes(c.id) }))
+  );
+  const [loading, setLoading] = useState(false);
 
   const handleSearchResults = useCallback((results: Charity[]) => {
-    setCharities(results);
-  }, []);
+    setCharities(results.map(c => ({ ...c, isSupporting: supportedIds.includes(c.id) })));
+  }, [supportedIds]);
 
-  const handleLoadingState = useCallback((loading: boolean) => {
-    setIsLoading(loading);
+  const handleLoadingState = useCallback((isLoading: boolean) => {
+    setLoading(isLoading);
   }, []);
 
   return (
@@ -39,13 +43,13 @@ export const CharityDirectoryClient = ({ initialCharities }: CharityDirectoryCli
 
       <motion.div
         initial={false}
-        animate={{ opacity: isLoading ? 0.5 : 1 }}
-        transition={{ duration: 0.2 }}
+        animate={{ opacity: loading ? 0.6 : 1 }}
+        transition={{ duration: 0.3 }}
         className="relative"
       >
         <CharityGrid 
           charities={charities} 
-          isLoading={isLoading} 
+          loading={loading} 
         />
       </motion.div>
     </div>

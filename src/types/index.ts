@@ -5,10 +5,49 @@ export interface User {
   name: string;
   email: string;
   role: Role;
-  charity_perc: number;
   stripe_customer_id: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export type EventType = 'golf_day' | 'fundraiser' | 'tournament' | 'other';
+
+export interface Charity {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image_url: string | null;
+  website_url: string | null;
+  is_featured: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CharityEvent {
+  id: string;
+  charity_id: string;
+  title: string;
+  description: string;
+  event_date: string;
+  location: string;
+  event_type: EventType;
+  image_url: string | null;
+  registration_url: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserCharity {
+  id: string;
+  user_id: string;
+  charity_id: string;
+  allocation_perc: number;
+  created_at: string;
+  updated_at: string;
+  charity?: Charity;
 }
 
 export type SubscriptionStatus = 'active' | 'cancelled' | 'past_due' | 'trialing';

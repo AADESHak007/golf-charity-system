@@ -11,7 +11,23 @@ export const metadata: Metadata = {
 export default async function CharitiesPage() {
   const supabase = await createClient();
 
-  // Fetch initial charities server side
+  // 1. Fetch Auth User
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // 2. Fetch User Supported Charity IDs if logged in
+  let supportedIds: string[] = [];
+  if (user) {
+    const { data: userCharities } = await supabase
+      .from('user_charities')
+      .select('charity_id')
+      .eq('user_id', user.id);
+    
+    if (userCharities) {
+      supportedIds = userCharities.map(c => c.charity_id);
+    }
+  }
+
+  // 3. Fetch initial charities server side
   const { data: charities, error } = await supabase
     .from('charities')
     .select('id, name, slug, description, image_url, is_featured')
@@ -46,7 +62,10 @@ export default async function CharitiesPage() {
         </section>
 
         {/* Directory Content (Client-side interactive part) */}
-        <CharityDirectoryClient initialCharities={charities || []} />
+        <CharityDirectoryClient 
+          initialCharities={charities || []} 
+          supportedIds={supportedIds}
+        />
 
       </div>
     </main>

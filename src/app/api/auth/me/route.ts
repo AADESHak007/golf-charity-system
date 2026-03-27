@@ -18,11 +18,12 @@ export async function GET() {
     // Fetch user details from public.users
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('id, name, email, role, charity_perc')
+      .select('id, name, email, role')
       .eq('id', authUser.id)
       .single();
 
     if (userError || !userData) {
+      console.error('User profile error:', userError);
       return NextResponse.json<ApiResponse>(
         { success: false, error: 'User profile not found' },
         { status: 404 }
