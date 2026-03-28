@@ -1,67 +1,50 @@
 import { ReactNode } from "react";
 import { AdminNav, AdminSidebarFoot } from "@/components/admin/AdminNav";
-import { ShieldCheck, User } from "lucide-react";
+import { ShieldCheck, User, Search, Bell } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-slate-50 font-outfit text-slate-800">
+    <div className="flex min-h-screen bg-white text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
       {/* Sidebar */}
-      <aside className="w-72 bg-slate-900 text-slate-100 flex flex-col border-r border-slate-800 shrink-0">
+      <aside className="w-[300px] bg-[#050810] text-slate-100 flex flex-col border-r border-white/5 shrink-0 fixed inset-y-0 z-50">
         {/* Sidebar Header */}
-        <div className="p-8 pb-4 flex items-center gap-3">
-          <div className="p-2 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/30">
-            <ShieldCheck className="text-white" size={28} />
+        <div className="p-10 pb-6 flex items-center gap-4">
+          <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-indigo-400 shadow-inner">
+            <ShieldCheck size={24} />
           </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">Admin Console</h1>
-            <p className="text-slate-500 text-[13px] font-medium uppercase tracking-wider">Golf Charity Ops</p>
+          <div className="min-w-0">
+            <h1 className="text-xl font-serif italic text-white tracking-widest leading-none mb-1">Admin.</h1>
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.3em] truncate italic opacity-80">General Ops Console</p>
           </div>
         </div>
 
         {/* Sidebar Nav */}
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-600 mb-6 ml-4 italic opacity-50">Operational Menu</p>
           <AdminNav />
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-6">
-          <div className="bg-slate-800/50 rounded-2xl p-4 flex items-center gap-4 border border-white/5">
-            <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-indigo-400 font-bold border-2 border-slate-600">
+        <div className="p-8">
+          <div className="bg-white/5 rounded-3xl p-5 flex items-center gap-4 border border-white/10 group hover:bg-white/10 transition-all duration-500 cursor-pointer mb-6">
+            <div className="w-11 h-11 rounded-2xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-serif italic text-xl border border-indigo-500/30 group-hover:scale-110 transition-transform">
               A
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-semibold truncate leading-none mb-1">Administrator</p>
-              <p className="text-xs text-slate-500 truncate">System Overseer</p>
+              <p className="text-sm font-bold truncate tracking-tight text-white mb-0.5">Administrator</p>
+              <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest italic opacity-70">Overseer</p>
             </div>
           </div>
           <AdminSidebarFoot />
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Header */}
-        <header className="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-10 shrink-0">
-          <div>
-            {/* Breadcrumbs or dynamic page title will go here if needed */}
-          </div>
-          <div className="flex items-center gap-4">
-             <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-full">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <span className="text-xs font-semibold text-slate-600">Server Online</span>
-             </div>
-             <button className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all rounded-full relative">
-                <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white"></span>
-                <ShieldCheck size={20} />
-             </button>
-          </div>
-        </header>
-
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden p-8">
-          <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
-             {children}
-          </div>
+      {/* Main Content Side */}
+      <main className="flex-1 flex flex-col min-h-screen ml-[300px] relative z-10">
+        {/* Dynamic Content Area */}
+        <div className="flex-1 p-12 w-full max-w-[1700px] mx-auto animate-in fade-in slide-in-from-bottom-3 duration-1000">
+           {children}
         </div>
       </main>
     </div>

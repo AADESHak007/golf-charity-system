@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseServiceRole } from "@/lib/supabase/service";
 import { ApiResponse } from "@/types";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: any) {
   try {
+    const params = await context.params;
     const userId = params.id;
-
+    
+    // FETCH SINGLE USER WITH RELATIONS
     const { data: user, error: userError } = await supabaseServiceRole
       .from("users")
       .select(`
@@ -17,24 +19,39 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         golf_scores (*),
         draw_entries (
           *,
-          draws (*)
+          draws (*),
+          winner_verifications (*)
         ),
         user_charities (
           *,
           charities (*)
-        ),
-        winner_verifications (*)
+        )
       `)
       .eq("id", userId)
       .single();
 
     if (userError || !user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ 
+        success: false, 
+        error: `User not found with ID: ${userId}`,
+        details: userError?.message || "No error details"
+      }, { status: 404 });
     }
+
+    // Flatten winner_verifications for UI if they exist in draw_entries
+    const flattenedVerifications = user.draw_entries?.reduce((acc: any[], entry: any) => {
+      if (entry.winner_verifications) {
+        return [...acc, ...entry.winner_verifications];
+      }
+      return acc;
+    }, []) || [];
 
     return NextResponse.json({
       success: true,
-      data: user
+      data: {
+        ...user,
+        winner_verifications: flattenedVerifications
+      }
     });
 
   } catch (error: any) {
@@ -46,14 +63,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
+    const params = await context.params;
     const userId = params.id;
-    const body = await req.json();
+    const body = await request.json();
 
     const { name, email, role } = body;
 
-    // Build update object, excluding stripe_customer_id explicitly as per rules
     const updateData: any = {
       updated_at: new Date().toISOString()
     };
@@ -84,7 +101,3 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     }, { status: 500 });
   }
 }
-
-// DELETE GOLF SCORE specifically via user ID context? No, usually IDs are unique.
-// But we might need a separate endpoint for scores or just handle it here if it's very specific.
-// I'll keep it simple for now as requested.

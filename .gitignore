@@ -33,6 +33,7 @@ yarn-error.log*
 # Custom log files
 CHAT_HISTORY
 CHARITY_TESTING.md
+tmp/*
 
 # env files (can opt-in for committing if needed)
 .env*

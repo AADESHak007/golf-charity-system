@@ -76,7 +76,7 @@ export const CharityPercSlider = ({ initialPerc, monthlyPlanPrice, onSuccess }: 
         <div className="flex items-center justify-center gap-2 p-3 bg-zinc-950/50 rounded-2xl border border-white/5 max-w-[340px] mx-auto overflow-hidden">
           <Heart className="w-4 h-4 text-orange-500 fill-orange-500 shrink-0" />
           <p className="text-sm font-bold text-white leading-relaxed">
-            You're contributing <span className="text-orange-400 font-black">£{calculatedAmount}</span> per month
+            You're contributing <span className="text-orange-400 font-black">${calculatedAmount}</span> per month
           </p>
         </div>
       </div>

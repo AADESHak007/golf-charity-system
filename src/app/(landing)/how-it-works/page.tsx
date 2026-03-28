@@ -126,9 +126,9 @@ export default function HowItWorksPage() {
                         <p className="text-xs font-black text-gray-500 uppercase tracking-widest text-center lg:text-left">Rollover Timeline Illustration</p>
                         <div className="flex flex-col gap-6">
                             {[
-                                { month: 'JANUARY', amount: '£200', text: 'No winner, rolling over...', color: 'text-indigo-400 border-indigo-400/20' },
-                                { month: 'FEBRUARY', amount: '£400', text: 'Accumulating jackpot...', color: 'text-sky-400 border-sky-400/20' },
-                                { month: 'MARCH', amount: '£600', text: 'JACKPOT WON!', color: 'text-emerald-400 border-emerald-400/20 bg-emerald-500/10 shadow-2xl shadow-emerald-500/10' },
+                                { month: 'JANUARY', amount: '$200', text: 'No winner, rolling over...', color: 'text-indigo-400 border-indigo-400/20' },
+                                { month: 'FEBRUARY', amount: '$400', text: 'Accumulating jackpot...', color: 'text-sky-400 border-sky-400/20' },
+                                { month: 'MARCH', amount: '$600', text: 'JACKPOT WON!', color: 'text-emerald-400 border-emerald-400/20 bg-emerald-500/10 shadow-2xl shadow-emerald-500/10' },
                             ].map((item, i) => (
                                 <div key={i} className={cn("p-6 border rounded-[2.5rem] flex items-center justify-between group transition-all duration-500 hover:scale-[1.05]", item.color)}>
                                     <div>

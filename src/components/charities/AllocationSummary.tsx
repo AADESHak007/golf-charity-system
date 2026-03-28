@@ -41,7 +41,7 @@ export const AllocationSummary = ({
             {totalAllocated}% <span className="text-zinc-600">of 50%</span>
           </h3>
           <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">
-            {remainingAllocated}% remaining <span className="text-zinc-800 mx-2">·</span> £{totalMonthlyPounds.toFixed(2)} total monthly contribution
+            {remainingAllocated}% remaining <span className="text-zinc-800 mx-2">·</span> ${totalMonthlyPounds.toFixed(2)} total monthly contribution
           </p>
         </div>
 

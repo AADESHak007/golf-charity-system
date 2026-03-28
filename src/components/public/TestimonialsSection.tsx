@@ -1,88 +1,68 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Quote, Star } from 'lucide-react';
+import Image from 'next/image';
 
 const testimonials = [
   {
-    quote: "I won the jackpot in my third month! Amazing platform that actually gives back.",
-    author: "James T.",
-    location: "Manchester",
-    rating: 5,
-    initials: "JT"
+    quote: "Golf Charity has turned my weekend rounds into something much more meaningful. I've won twice, but knowing my contributions help children's education is the real victory.",
+    author: "James Peterson",
+    role: "Member since 2024",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600"
   },
   {
-    quote: "Love that I can support Cancer Research while playing golf. My scores mean more now.",
-    author: "Sarah M.",
-    location: "Edinburgh",
-    rating: 5,
-    initials: "SM"
+    quote: "An elegant platform that genuinely delivers on its promise. The transparency of the charity impact reports is what really sets them apart from anything else in the sport.",
+    author: "Sarah West",
+    role: "Gold Subscription",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=600"
   },
   {
-    quote: "The yearly plan is incredible value. Monthly draw results are always the highlight of my week.",
-    author: "Paul K.",
-    location: "Bristol",
-    rating: 5,
-    initials: "PK"
+    quote: "The thrill of the monthly draw combined with a deep sense of purpose. It's rare to find a platform that feels this premium while doing this much good.",
+    author: "Michael Chen",
+    role: "Impact Partner",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600"
   }
 ];
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-32 bg-[#0a0f1e] text-white relative overflow-hidden">
-      {/* Background Decorative Rings */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-sky-600/5 blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+    <section className="section-padding bg-[#050810] relative">
+      <div className="max-w-7xl mx-auto px-6">
         
-        {/* Section Header */}
-        <div className="text-center space-y-4 mb-24 flex flex-col items-center">
-            <span className="text-xs font-black text-indigo-400 uppercase tracking-widest bg-white/5 px-4 py-2 rounded-full border border-white/5 shadow-2xl backdrop-blur-md">Trusted Community</span>
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-none">
-              Hear from our <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-sky-400 italic">Winners.</span>
-            </h2>
-            <p className="text-lg text-gray-400 font-medium max-w-xl">
-              Join thousands of golfers who are winning prizes and making a real difference.
-            </p>
+        <div className="text-center mb-32 space-y-6">
+          <span className="text-accent text-sm font-medium tracking-[0.3em] uppercase block">Testimonials</span>
+          <h2 className="text-5xl md:text-8xl font-serif text-white tracking-tighter leading-none italic">
+            Voices of Impact.
+          </h2>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-8">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+          {testimonials.map((t, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.15 }}
+              transition={{ delay: i * 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="group relative p-10 bg-white/5 border border-white/10 rounded-[3rem] space-y-10 hover:bg-white/[0.08] hover:border-white/20 transition-all duration-500 shadow-2xl"
+              className="space-y-8"
             >
-              {/* Quote Icon */}
-              <div className="absolute top-8 right-8 text-white/5 group-hover:text-indigo-500/10 transition-colors">
-                  <Quote size={80} weight="fill" />
-              </div>
-
-              {/* Star Rating */}
-              <div className="flex items-center gap-1.5 mb-6">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-emerald-500 fill-emerald-500" />
-                ))}
-              </div>
-
-              {/* Content */}
-              <p className="text-xl font-medium tracking-tight text-white leading-relaxed italic relative z-20">
+              <div className="text-2xl md:text-3xl text-white/80 font-serif leading-relaxed italic muted-gradient">
                 "{t.quote}"
-              </p>
-
-              {/* Author Info */}
-              <div className="flex items-center gap-4 pt-10 border-t border-white/10 group-hover:border-indigo-500/20 transition-all">
-                <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center font-black text-white shadow-xl shadow-indigo-600/30 group-hover:scale-110 transition-transform">
-                  {t.initials}
+              </div>
+              
+              <div className="flex items-center gap-6 pt-8 border-t border-white/10">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden grayscale active:grayscale-0 transition-all duration-700">
+                  <Image 
+                    src={t.image} 
+                    alt={t.author} 
+                    fill 
+                    sizes="64px"
+                    className="object-cover" 
+                  />
                 </div>
                 <div>
-                   <h4 className="text-sm font-black text-white uppercase tracking-wider">{t.author}</h4>
-                   <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{t.location}</p>
+                   <h4 className="text-lg font-medium tracking-tight text-white">{t.author}</h4>
+                   <p className="text-xs uppercase tracking-widest text-white/40">{t.role}</p>
                 </div>
               </div>
             </motion.div>

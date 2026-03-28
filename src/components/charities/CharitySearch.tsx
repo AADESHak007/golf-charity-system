@@ -57,19 +57,19 @@ export const CharitySearch = ({ onSearch, onLoading }: CharitySearchProps) => {
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto mb-12">
       {/* Search Input */}
-      <div className="relative w-full group">
-        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-orange-500 transition-colors" />
+      <div className="relative w-full group shadow-[0_30px_100px_rgba(0,0,0,0.4)] rounded-full">
+        <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-white transition-colors" />
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search by mission or cause..."
-          className="w-full bg-zinc-900/50 border border-white/5 rounded-full py-4.5 pl-14 pr-12 text-lg font-medium text-white placeholder-zinc-500 outline-hidden focus:border-orange-500/50 focus:bg-zinc-900 transition-all shadow-xl shadow-zinc-950/20 shadow-none ring-0 appearance-none"
+          className="w-full bg-slate-900 border border-slate-800 rounded-full py-4.5 pl-14 pr-12 text-lg font-medium text-white placeholder-slate-500 outline-none focus:border-slate-700 focus:shadow-2xl transition-all"
         />
         {searchTerm && (
           <button
             onClick={clearSearch}
-            className="absolute right-5 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-zinc-800 text-zinc-400 hover:text-white transition-colors"
+            className="absolute right-5 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -77,12 +77,12 @@ export const CharitySearch = ({ onSearch, onLoading }: CharitySearchProps) => {
       </div>
 
       {/* Featured Toggle */}
-      <div className="flex bg-zinc-900/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md shrink-0 w-full md:w-auto">
+      <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 shrink-0 w-full md:w-auto shadow-2xl">
         <button
           onClick={() => setFeaturedOnly(false)}
           className={cn(
-            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all",
-            !featuredOnly ? "bg-zinc-800 text-white shadow-xl" : "text-zinc-500 hover:text-zinc-300"
+            "flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex-1 md:flex-none",
+            !featuredOnly ? "bg-white text-slate-900 shadow-xl" : "text-slate-500 hover:text-white"
           )}
         >
           <LayoutGrid className="w-3.5 h-3.5" />
@@ -91,8 +91,8 @@ export const CharitySearch = ({ onSearch, onLoading }: CharitySearchProps) => {
         <button
           onClick={() => setFeaturedOnly(true)}
           className={cn(
-            "flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all",
-            featuredOnly ? "bg-orange-500 text-white shadow-xl" : "text-zinc-500 hover:text-zinc-300"
+            "flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex-1 md:flex-none",
+            featuredOnly ? "bg-white text-slate-900 shadow-xl" : "text-slate-500 hover:text-white"
           )}
         >
           <Sparkles className="w-3.5 h-3.5" />

@@ -234,14 +234,14 @@ export default function CharityManagementPage() {
                             <Users size={12} />
                             Supporters
                          </div>
-                         <p className="text-lg font-black text-slate-900">1,240</p>
+                         <p className="text-lg font-black text-slate-900">{charity.supporters?.[0]?.count || 0}</p>
                       </div>
                       <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100/50 text-right">
                          <div className="flex items-center justify-end gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
                             Allocation
                             <Heart size={12} className="text-rose-400" />
                          </div>
-                         <p className="text-lg font-black text-slate-900">£4,850</p>
+                         <p className="text-lg font-black text-slate-900">${((charity.supporters?.[0]?.count || 0) * 12.50).toLocaleString()}</p>
                       </div>
                    </div>
 

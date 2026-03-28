@@ -21,7 +21,7 @@ const commonFeatures = [
 ];
 
 const yearlyAdditional = [
-  "2 months free (£29.89 savings)",
+  "2 months free ($29.89 savings)",
   "Priority winner verification",
   "Exclusive yearly member badge",
 ];

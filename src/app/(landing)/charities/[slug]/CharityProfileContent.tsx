@@ -55,8 +55,10 @@ export default function CharityProfileContent({ slug }: CharityProfileContentPro
             // User charities check
             const userCharRes = await fetch('/api/user/charities');
             const userCharData: ApiResponse<any[]> = await userCharRes.json();
-            if (userCharData.success) {
-              setUserCharities(userCharData.data || []);
+            if (userCharData.success && Array.isArray(userCharData.data)) {
+              setUserCharities(userCharData.data);
+            } else {
+              setUserCharities([]);
             }
           }
         }
@@ -71,21 +73,21 @@ export default function CharityProfileContent({ slug }: CharityProfileContentPro
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-40 gap-4 bg-zinc-950 min-h-screen">
-        <Loader2 className="w-12 h-12 text-orange-500 animate-spin" />
-        <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Accessing Charity HQ...</p>
+      <div className="flex flex-col items-center justify-center py-40 gap-4 bg-slate-950 min-h-screen">
+        <Loader2 className="w-12 h-12 text-slate-800 animate-spin" />
+        <p className="text-slate-500 font-bold uppercase tracking-widest text-xs italic">Accessing Charity HQ...</p>
       </div>
     );
   }
 
   if (error || !charity) {
     return (
-        <div className="min-h-screen bg-zinc-950 pt-40 px-6">
-            <div className="max-w-md mx-auto p-12 bg-rose-500/10 border border-rose-500/20 rounded-[3rem] text-center space-y-6">
+        <div className="min-h-screen bg-slate-950 pt-40 px-6">
+            <div className="max-w-md mx-auto p-12 bg-rose-500/10 border border-rose-500/20 rounded-[3rem] text-center space-y-6 shadow-2xl">
                 <AlertCircle className="w-16 h-16 text-rose-500 mx-auto" />
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Profile Offline</h3>
-                <p className="text-rose-400 font-medium">{error || "Could not load this mission profile."}</p>
-                <Link href="/charities" className="block w-full py-4 bg-rose-500 text-white font-black rounded-2xl">
+                <h3 className="text-3xl font-serif italic text-white tracking-tighter">Profile Offline.</h3>
+                <p className="text-rose-400 font-medium italic">{error || "Could not load this mission profile."}</p>
+                <Link href="/charities" className="block w-full py-4 bg-white text-slate-900 font-black rounded-2xl hover:bg-slate-200 transition-colors uppercase tracking-[0.2em] text-[10px]">
                     Back to directory
                 </Link>
             </div>
@@ -93,85 +95,94 @@ export default function CharityProfileContent({ slug }: CharityProfileContentPro
     );
   }
 
-  const userCharityData = userCharities.find(c => c.charity_id === charity.id) || null;
-  const totalAllocated = userCharities.reduce((acc, curr) => acc + curr.allocation_perc, 0);
-  const currentSelectionsCount = userCharities.length;
+  const validUserCharities = Array.isArray(userCharities) ? userCharities : [];
+  const userCharityData = validUserCharities.find(c => c.charity_id === charity.id) || null;
+  const totalAllocated = validUserCharities.reduce((acc, curr) => acc + curr.allocation_perc, 0);
+  const currentSelectionsCount = validUserCharities.length;
 
   return (
-    <main className="min-h-screen pt-40 pb-32 bg-zinc-950">
-      <div className="max-w-7xl mx-auto px-6 space-y-16">
-        
-        {/* Navigation */}
-        <div className="flex items-center justify-between">
-           <Link 
-             href="/charities" 
-             className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors group"
-           >
-             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-             Impact Directory
-           </Link>
-           
-           {userCharityData && (
-              <div className="flex items-center gap-3 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full shadow-2xl">
-                 <BadgeCheck className="w-5 h-5 text-emerald-500" />
-                 <span className="text-[12px] font-black uppercase tracking-widest text-emerald-500">
-                    Supporting: {userCharityData.allocation_perc}% Allocation
-                 </span>
-              </div>
-           )}
+    <main className="pb-32 bg-white relative z-0">
+      
+      {/* Dynamic Full Width Dark Header */}
+      <div className="w-full bg-[#050810] pt-40 pb-48 px-6 rounded-b-[4rem]">
+        <div className="max-w-7xl mx-auto space-y-12">
+          
+          {/* Navigation */}
+          <div className="flex items-center justify-between">
+            <Link 
+              href="/charities" 
+              className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white transition-colors group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              Impact Directory
+            </Link>
+            
+            {userCharityData && (
+               <div className="flex items-center gap-3 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-full shadow-2xl">
+                  <BadgeCheck className="w-5 h-5 text-emerald-500" />
+                  <span className="text-[12px] font-black uppercase tracking-widest text-emerald-500">
+                     Supporting: {userCharityData.allocation_perc}% Allocation
+                  </span>
+               </div>
+            )}
+          </div>
+
+          <h1 className="text-6xl md:text-8xl font-serif italic text-white tracking-tighter leading-[0.9] max-w-4xl drop-shadow-2xl">
+            {charity.name}
+          </h1>
+
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 -mt-32 relative z-10">
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
           
           {/* Left Column: Content */}
           <div className="lg:col-span-7 space-y-16">
-            <div className="relative rounded-[4rem] overflow-hidden aspect-video border border-white/5 shadow-2xl group ring-1 ring-white/10 ring-inset">
+            <div className="relative rounded-[4rem] overflow-hidden aspect-video border border-slate-800 shadow-[0_30px_100px_rgba(0,0,0,0.4)] group ring-1 ring-white/10 ring-inset bg-slate-900">
               <img 
                 src={charity.image_url || ''} 
                 alt={charity.name} 
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050810]/80 via-transparent to-transparent opacity-80" />
               
               {charity.is_featured && (
-                <div className="absolute top-10 left-10 px-8 py-4 bg-orange-500 text-white rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-2xl shadow-orange-500/20">
+                <div className="absolute top-10 left-10 px-8 py-3 bg-white text-slate-900 rounded-full text-[10px] font-black uppercase tracking-[0.3em] shadow-2xl">
                   Mission-First Partner
                 </div>
               )}
             </div>
 
             <div className="space-y-10">
-              <h1 className="text-6xl md:text-9xl font-black text-white tracking-tighter leading-[0.85] max-w-2xl drop-shadow-2xl">
-                {charity.name}
-              </h1>
-              
-              <div className="prose prose-invert max-w-none">
-                <p className="text-xl md:text-3xl text-zinc-400 leading-relaxed font-black tracking-tight italic">
+              <div className="prose prose-slate max-w-none pt-8">
+                <p className="text-xl md:text-2xl text-slate-500 leading-relaxed font-medium tracking-tight italic">
                   "{charity.description}"
                 </p>
                 
-                <div className="h-px w-full bg-gradient-to-r from-orange-500/50 to-transparent my-16 opacity-30" />
+                <div className="h-px w-full bg-slate-100 my-16" />
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                   <div className="space-y-6 p-8 bg-zinc-900/30 rounded-[2.5rem] border border-white/5 shadow-inner">
-                      <h4 className="text-white font-black uppercase tracking-widest text-xs mb-4">Core Mission</h4>
-                      <p className="text-zinc-500 leading-relaxed text-sm font-medium">
+                   <div className="space-y-6 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                      <h4 className="text-slate-900 font-black uppercase tracking-[0.3em] text-[10px] mb-4">Core Mission</h4>
+                      <p className="text-slate-500 leading-relaxed text-[13px] font-medium italic">
                         Digital Heroes transforms every golf round into reliable funding for {charity.name}. 
                         By selecting this mission, 10-50% of your registration fee goes straight to their programs.
                       </p>
                    </div>
                    {charity.website_url && (
                      <div className="space-y-6">
-                        <h4 className="text-white font-black uppercase tracking-widest text-xs mb-4">Official Presence</h4>
+                        <h4 className="text-slate-900 font-black uppercase tracking-[0.3em] text-[10px] mb-4 text-center md:text-left">Official Presence</h4>
                         <a 
                           href={charity.website_url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="flex items-center gap-4 p-8 bg-zinc-900 border border-white/10 rounded-[2.5rem] text-sm font-black uppercase tracking-widest text-zinc-100 hover:text-orange-500 hover:border-orange-500/50 transition-all active:scale-95 group/web shadow-xl"
+                          className="flex items-center justify-center md:justify-start gap-4 p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] text-[11px] font-black uppercase tracking-[0.2em] text-slate-900 hover:bg-slate-100 hover:border-slate-200 transition-all active:scale-95 group/web shadow-sm"
                         >
-                          <Globe className="w-6 h-6 text-orange-500" />
+                          <Globe className="w-5 h-5 text-slate-400 group-hover/web:text-slate-900 transition-colors" />
                           Explore Website
-                          <ExternalLink className="w-4 h-4 ml-auto opacity-40 group-hover/web:opacity-100 transition-opacity" />
+                          <ExternalLink className="w-4 h-4 ml-auto opacity-40 group-hover/web:opacity-100 transition-opacity hidden md:block" />
                         </a>
                      </div>
                    )}
@@ -180,12 +191,12 @@ export default function CharityProfileContent({ slug }: CharityProfileContentPro
             </div>
 
             {/* Events Section */}
-            <div className="space-y-10 pt-16 border-t border-white/5">
+            <div className="space-y-10 pt-16 border-t border-slate-100">
                <div className="flex items-center gap-6">
-                  <div className="p-4 bg-orange-500/10 rounded-2xl text-orange-500">
+                  <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-900 shadow-sm">
                     <CalendarDays className="w-8 h-8" />
                   </div>
-                  <h2 className="text-4xl font-black text-white tracking-tighter">Impact Events</h2>
+                  <h2 className="text-4xl font-serif italic tracking-tighter text-slate-900">Impact Events.</h2>
                </div>
                
                {charity.events && charity.events.length > 0 ? (
@@ -195,9 +206,9 @@ export default function CharityProfileContent({ slug }: CharityProfileContentPro
                    ))}
                  </div>
                ) : (
-                 <div className="p-20 text-center bg-zinc-900/20 border border-white/5 border-dashed rounded-[3.5rem] flex flex-col items-center gap-4">
-                    <CalendarDays className="w-12 h-12 text-zinc-800" />
-                    <p className="text-zinc-600 font-black uppercase tracking-widest text-[10px]">No upcoming events listed</p>
+                 <div className="p-20 text-center bg-slate-50 border border-slate-100 rounded-[3.5rem] flex flex-col items-center gap-4 shadow-sm">
+                    <CalendarDays className="w-12 h-12 text-slate-300" />
+                    <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px]">No upcoming events listed</p>
                  </div>
                )}
             </div>

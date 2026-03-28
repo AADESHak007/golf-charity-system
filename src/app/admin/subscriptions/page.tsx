@@ -84,7 +84,7 @@ export default function SubscriptionsManagementPage() {
            <div className="flex items-center gap-4 px-6 py-4 bg-white border border-slate-200 rounded-3xl shadow-sm">
               <div className="flex flex-col text-right">
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Active Monthly Burn</p>
-                 <p className="text-xl font-black text-green-600 leading-none">£8,240.00</p>
+                 <p className="text-xl font-black text-green-600 leading-none">$8,240.00</p>
               </div>
               <div className="w-px h-10 bg-slate-100"></div>
               <Activity size={24} className="text-green-400" />
@@ -159,7 +159,7 @@ export default function SubscriptionsManagementPage() {
                               <span className="text-sm font-black text-slate-900 leading-none mb-1 uppercase tracking-tight">{sub.subscription_plans?.name}</span>
                               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
                                  <DollarSign size={10} className="text-green-500" />
-                                 £{(sub.subscription_plans?.price_pence / 100).toLocaleString()} / {sub.subscription_plans?.interval}
+                                 ${(sub.subscription_plans?.price_pence / 100).toLocaleString()} / {sub.subscription_plans?.interval}
                               </p>
                            </div>
                         </td>

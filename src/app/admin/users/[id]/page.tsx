@@ -9,23 +9,18 @@ import {
   CreditCard, 
   Trophy, 
   Heart, 
-  Calendar, 
-  Clock, 
   ShieldCheck, 
-  Edit3, 
-  Trash2, 
   Mail, 
-  ExternalLink,
   Save,
   Loader2,
-  AlertCircle,
   Hash,
-  Activity,
-  Settings
+  Activity
 } from "lucide-react";
 import { format } from "date-fns";
 import { ApiResponse, Role } from "@/types";
 import { cn } from "@/lib/utils";
+import { AdminScoreEditor } from "./AdminScoreEditor";
+import { AdminScoreAdder } from "./AdminScoreAdder";
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -82,15 +77,6 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
     }
   };
 
-  const handleDeleteScore = async (scoreId: string) => {
-    if (!confirm("Are you sure you want to delete this score?")) return;
-    try {
-       const res = await fetch(`/api/scores/${scoreId}`, { method: 'DELETE' });
-       if (res.ok) fetchData();
-    } catch (error) {
-       console.error(error);
-    }
-  };
 
   if (loading) {
      return (
@@ -218,7 +204,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                   </div>
                   <div className="space-y-1">
                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">Net Payouts</p>
-                     <p className="text-3xl font-black text-green-400">£0</p>
+                     <p className="text-3xl font-black text-green-400">$0</p>
                      <p className="text-[9px] font-bold text-slate-500 uppercase">Pending Verification</p>
                   </div>
                </div>
@@ -259,28 +245,18 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                      <div className="space-y-6">
                         <div className="flex items-center justify-between mb-4">
                            <h4 className="text-2xl font-black text-slate-900 tracking-tight leading-none uppercase">Submitted Scores</h4>
-                           <Link href="/admin/users" className="text-xs font-bold text-indigo-600 underline">Add Score Manually</Link>
+                           {(!user.golf_scores || user.golf_scores.length < 5) && (
+                              <AdminScoreAdder userId={user.id} onUpdate={fetchData} />
+                           )}
                         </div>
                         {user.golf_scores?.length > 0 ? (
                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {user.golf_scores.map((score: any) => (
-                                 <div key={score.id} className="p-5 bg-slate-50 rounded-3xl border border-slate-100 flex items-center justify-between group">
-                                    <div className="flex items-center gap-4">
-                                       <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-xl font-black text-slate-900 border border-slate-100">
-                                          {score.score}
-                                       </div>
-                                       <div>
-                                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Played On</p>
-                                          <p className="text-sm font-bold text-slate-700">{format(new Date(score.played_at), 'PPP')}</p>
-                                       </div>
-                                    </div>
-                                    <button 
-                                      onClick={() => handleDeleteScore(score.id)}
-                                      className="p-3 text-slate-300 hover:text-red-500 hover:bg-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
-                                    >
-                                       <Trash2 size={18} />
-                                    </button>
-                                 </div>
+                                 <AdminScoreEditor 
+                                   key={score.id} 
+                                   scoreData={score} 
+                                   onUpdate={fetchData} 
+                                 />
                               ))}
                            </div>
                         ) : (
@@ -319,7 +295,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                                           "text-lg font-black",
                                           entry.prize_amount_pence > 0 ? "text-indigo-600" : "text-slate-300"
                                        )}>
-                                          £{(entry.prize_amount_pence / 100).toLocaleString()}
+                                          ${(entry.prize_amount_pence / 100).toLocaleString()}
                                        </p>
                                     </div>
                                  </div>
@@ -355,9 +331,6 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                                           {uc.allocation_perc}%
                                        </div>
                                     </div>
-                                    <button className="p-3 text-slate-300 hover:text-indigo-600 opacity-0 group-hover:opacity-100 transition-all">
-                                       <Settings size={20} />
-                                    </button>
                                  </div>
                               ))}
                            </div>

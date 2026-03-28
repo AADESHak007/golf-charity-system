@@ -27,7 +27,6 @@ export default function SignInForm() {
           body: JSON.stringify({ email, password }),
         });
         
-        // Rule: Password never stored in state after submission
         setPassword('');
         
         const data: ApiResponse = await res.json();
@@ -47,87 +46,94 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-10 p-8">
-      <div className="space-y-3">
-        <h2 className="text-4xl font-black tracking-tighter text-white">Sign In</h2>
-        <p className="text-gray-400 font-medium">Welcome back! Sign in to manage your scores and draws.</p>
+    <div className="w-full max-w-md mx-auto space-y-12 p-8">
+      <div className="space-y-4 text-center lg:text-left">
+        <h2 className="text-5xl font-serif tracking-tighter text-white italic">Welcome back.</h2>
+        <p className="text-white/50 font-light text-lg">Sign in to continue your journey of impact.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-1.5 ring-offset-background transition-all focus-within:ring-2 focus-within:ring-emerald-500/50 rounded-xl overflow-hidden">
-          <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-2">Email Address</label>
-          <div className="relative group">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-emerald-400 transition-colors" />
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 transition-all font-medium"
-            />
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 ml-1">Email Address</label>
+            <div className="relative group">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-accent transition-colors" />
+              <input
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-white/10 focus:outline-none focus:border-accent/30 transition-all font-light"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-1.5 ring-offset-background transition-all focus-within:ring-2 focus-within:ring-emerald-500/50 rounded-xl overflow-hidden">
-          <label className="text-xs font-black uppercase tracking-widest text-gray-500 ml-2">Password</label>
-          <div className="relative group">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-emerald-400 transition-colors" />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white placeholder:text-gray-600 focus:outline-none focus:border-emerald-500/50 transition-all font-medium"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 ml-1">Password</label>
+            <div className="relative group">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-accent transition-colors" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-4 pl-12 pr-12 text-white placeholder:text-white/10 focus:outline-none focus:border-accent/30 transition-all font-light"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-white transition-colors"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         </div>
 
         <div className="flex items-center justify-end">
-          <Link href="/auth/forgot-password" title="Feature coming soon" className="text-sm font-bold text-gray-500 hover:text-emerald-400 transition-colors">
-            Forgot password?
+          <Link href="/auth/forgot-password" title="Feature coming soon" className="text-xs font-medium text-white/30 hover:text-accent transition-colors tracking-widest uppercase">
+            Reset Password
           </Link>
         </div>
 
         {error && (
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-3 text-rose-400"
+            className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-2xl flex items-center gap-3 text-rose-400/80"
           >
-            <AlertCircle className="w-5 h-5 shrink-0" />
-            <p className="text-sm font-bold tracking-tight">{error}</p>
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <p className="text-xs font-medium tracking-wide">{error}</p>
           </motion.div>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:hover:bg-emerald-500 text-white py-4 rounded-xl font-black tracking-tight text-lg shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
+          className="w-full btn-premium group"
         >
-          {loading ? (
-            <Loader2 className="w-6 h-6 animate-spin" />
-          ) : (
-            <>
-              Sign In
-              <div className="group-hover:translate-x-1 transition-transform">→</div>
-            </>
-          )}
+          <span className="relative z-10 flex items-center justify-center gap-3">
+            {loading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <>
+                Sign In
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="group-hover:translate-x-1 transition-transform duration-300">
+                  <path d="M3.75 9H14.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M9 3.75L14.25 9L9 14.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </>
+            )}
+          </span>
         </button>
       </form>
 
-      <p className="text-center font-bold text-gray-500">
+      <p className="text-center text-white/30 text-xs tracking-widest uppercase font-medium pt-4">
         Don't have an account?{' '}
-        <Link href="/signup" className="text-emerald-400 hover:underline decoration-2 underline-offset-4 decoration-emerald-500/30 font-black">
-          Sign up
+        <Link href="/signup" className="text-accent hover:text-white transition-colors ml-1">
+          Join the Movement
         </Link>
       </p>
     </div>

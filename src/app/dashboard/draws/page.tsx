@@ -145,7 +145,7 @@ export default function DrawsPage() {
                                     </div>
                                     {matchCount >= 3 && (
                                         <div className="text-emerald-400 font-black tracking-tight">
-                                            £{prizeAmount.toFixed(2)}
+                                            ${prizeAmount.toFixed(2)}
                                         </div>
                                     )}
                                 </div>

@@ -23,6 +23,7 @@ export interface Charity {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  supporters?: { count: number }[];
 }
 
 export interface CharityEvent {

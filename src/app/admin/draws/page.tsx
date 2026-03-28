@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 
 export default function DrawsManagementPage() {
   const [draws, setDraws] = useState<any[]>([]);
+  const [stats, setStats] = useState({ total_lifetime_payouts_pence: 0 });
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -33,10 +34,11 @@ export default function DrawsManagementPage() {
     setLoading(true);
     try {
       const res = await fetch(`/api/admin/draws?page=${page}`);
-      const json = await res.json() as ApiResponse<{ draws: any[], total: number }>;
+      const json = await res.json() as ApiResponse<{ draws: any[], total: number, stats: any }>;
       if (json.success && json.data) {
         setDraws(json.data.draws);
         setTotal(json.data.total);
+        if (json.data.stats) setStats(json.data.stats);
       }
     } catch (error) {
        console.error(error);
@@ -65,7 +67,7 @@ export default function DrawsManagementPage() {
         <div className="flex items-center gap-4 px-6 py-4 bg-white border border-slate-200 rounded-3xl shadow-sm">
            <div className="flex flex-col text-right">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Total Lifetime Payouts</p>
-              <p className="text-xl font-black text-indigo-600 leading-none">£42,500.00</p>
+              <p className="text-xl font-black text-indigo-600 leading-none">${(stats.total_lifetime_payouts_pence / 100).toLocaleString()}.00</p>
            </div>
            <div className="w-px h-10 bg-slate-100"></div>
            <TrendingUp size={24} className="text-indigo-400" />
@@ -148,7 +150,7 @@ export default function DrawsManagementPage() {
                                  </div>
                                  <div className="w-px h-8 bg-slate-100"></div>
                                  <div className="flex flex-col">
-                                    <span className="text-xs font-black text-indigo-600 leading-none">£{(draw.total_prize_pool_pence / 100).toLocaleString()}</span>
+                                    <span className="text-xs font-black text-indigo-600 leading-none">${(draw.total_prize_pool_pence / 100).toLocaleString()}</span>
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Total Pool</span>
                                  </div>
                               </div>

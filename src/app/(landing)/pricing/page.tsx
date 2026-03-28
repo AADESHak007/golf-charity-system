@@ -19,10 +19,19 @@ export default function PricingPage() {
   const [loading, setLoading] = useState(true);
   const [checkingOut, setCheckingOut] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch plans from your DB
+    // 1. Fetch user to conditionally hide login prompt
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(d => {
+         if (d?.success && d?.data) setUser(d.data);
+      })
+      .catch(() => null);
+
+    // 2. Fetch plans from your DB
     fetch('/api/plans')
       .then(r => r.json())
       .then(d => {
@@ -78,114 +87,121 @@ export default function PricingPage() {
   ];
 
   return (
-    <>
-      <main className="flex-1 px-6 py-20 page-enter">
-        <div className="max-w-4xl mx-auto">
-          {/* Mock Mode Warning */}
-          {isMockMode && (
-            <div className="mb-8 p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm text-center">
-              💡 <strong>Developer Tip:</strong> You are seeing <strong>mock plans</strong> because your database is empty.
-              Run the SQL seeding script to see real plans.
-            </div>
-          )}
-          <div className="text-center mb-14">
-            <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 text-sm font-medium">
-              Flexible Pricing
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-              Choose Your <span className="gradient-text">Plan</span>
-            </h1>
-            <p className="text-gray-400 text-lg max-w-xl mx-auto">
-              Both plans include access to all prize draws and charity contributions. Save with our yearly plan.
-            </p>
+    <main className="min-h-screen pt-40 pb-32 bg-[#050810] font-sans relative z-0">
+      <div className="max-w-5xl mx-auto px-6">
+        
+        {/* Header */}
+        <div className="text-center space-y-6 mb-24">
+           <h1 className="text-5xl md:text-7xl font-serif italic text-white tracking-tighter drop-shadow-2xl">
+              Impact Memberships.
+           </h1>
+           <p className="text-lg md:text-xl text-slate-500 max-w-xl mx-auto font-medium tracking-tight">
+             Support verified missions while unlocking all premium platform features. 
+           </p>
+        </div>
+
+        {isMockMode && (
+          <div className="mb-12 p-6 rounded-3xl bg-amber-500/10 border border-amber-500/20 text-amber-500/80 text-sm text-center font-medium shadow-2xl">
+            💡 Developer Tip: Displaying local mock plans. Seed the database to view live Stripe products.
           </div>
+        )}
 
-          {error && (
-            <div className="mb-6 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-4 text-center">
-              ⚠️ {error}
-            </div>
-          )}
+        {error && (
+          <div className="mb-8 text-sm text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-2xl px-6 py-4 text-center shadow-xl">
+            ⚠️ {error}
+          </div>
+        )}
 
-          {loading ? (
-            <div className="flex justify-center items-center h-40">
-              <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-6">
-              {displayPlans.map((plan, idx) => {
-                const isYearly = plan.duration === 'yearly';
-                const isDisabled = !plan.stripe_price_id;
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-8 h-8 border-2 border-slate-700 border-t-white rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {displayPlans.map((plan) => {
+              const isYearly = plan.duration === 'yearly';
+              const isDisabled = !plan.stripe_price_id;
 
-                return (
-                  <div
-                    key={plan.id}
-                    className={`glass rounded-3xl p-8 flex flex-col relative overflow-hidden transition-all hover:border-green-500/25 ${isYearly ? 'ring-1 ring-green-500/30' : ''
-                      }`}>
-
-                    {isYearly && (
-                      <div className="absolute top-5 right-5 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                        BEST VALUE
-                      </div>
-                    )}
-
-                    <div className="mb-6">
-                      <div className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">
-                        {plan.duration}
-                      </div>
-                      <h2 className="text-2xl font-bold mb-1">{plan.name}</h2>
-                      <div className="flex items-end gap-1 mt-3">
-                        <span className="text-5xl font-extrabold">
-                          £{(plan.price / 100).toFixed(2)}
-                        </span>
-                        <span className="text-gray-400 mb-1.5">/{plan.duration === 'monthly' ? 'mo' : 'yr'}</span>
-                      </div>
-                      {isYearly && (
-                        <p className="text-green-400 text-sm mt-1">
-                          ≈ £{((plan.price / 100) / 12).toFixed(2)}/month — save 2 months
-                        </p>
-                      )}
+              return (
+                <div
+                  key={plan.id}
+                  className={`relative flex flex-col bg-slate-900 border rounded-[3rem] p-10 md:p-12 shadow-2xl transition-all duration-500 hover:shadow-emerald-500/5 group ${
+                    isYearly ? 'border-emerald-500/30 ring-1 ring-emerald-500/10 hover:border-emerald-500/50' : 'border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  {isYearly && (
+                    <div className="absolute top-8 right-8 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-lg shadow-emerald-500/20">
+                      Best Value
                     </div>
+                  )}
 
-                    <ul className="flex flex-col gap-3 mb-8 flex-1">
-                      {plan.features.map(f => (
-                        <li key={f} className="flex items-center gap-2.5 text-sm text-gray-300">
-                          <span className="text-green-400 shrink-0">✓</span> {f}
-                        </li>
-                      ))}
-                    </ul>
-
-                    {isDisabled ? (
-                      <div className="btn-primary opacity-40 cursor-not-allowed text-center py-3 rounded-xl text-white font-semibold">
-                        Add Stripe Price ID to Enable
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => handleCheckout(plan.id)}
-                        disabled={checkingOut === plan.id}
-                        className="btn-primary">
-                        {checkingOut === plan.id ? (
-                          <span className="flex items-center justify-center gap-2">
-                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            Redirecting...
-                          </span>
-                        ) : (
-                          `Get ${plan.name} →`
-                        )}
-                      </button>
+                  <div className="space-y-4 mb-10 border-b border-slate-800 pb-10">
+                    <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">
+                      {plan.duration}
+                    </div>
+                    <h2 className="text-4xl font-serif text-white tracking-tight">{plan.name}</h2>
+                    
+                    <div className="flex items-baseline gap-1 mt-6">
+                      <span className="text-6xl font-medium tracking-tighter text-white">
+                        ${(plan.price / 100).toFixed(2)}
+                      </span>
+                      <span className="text-slate-500 text-lg font-medium">/{plan.duration === 'monthly' ? 'mo' : 'yr'}</span>
+                    </div>
+                    
+                    {isYearly && (
+                      <p className="text-emerald-500/80 text-sm font-medium pt-2">
+                        ≈ ${((plan.price / 100) / 12).toFixed(2)}/month — save 2 months
+                      </p>
                     )}
                   </div>
-                );
-              })}
-            </div>
-          )}
 
-          <p className="text-center text-gray-500 text-sm mt-8">
-            Not signed in?{' '}
-            <Link href="/auth" className="text-green-400 hover:text-green-300">Create a free account</Link>{' '}
-            to subscribe.
-          </p>
-        </div>
-      </main>
-    </>
+                  <ul className="flex flex-col gap-5 mb-14 flex-1">
+                    {plan.features.map(f => (
+                      <li key={f} className="flex items-start gap-4 text-sm md:text-base text-slate-300 font-medium">
+                        <span className="text-emerald-500 mt-0.5">✓</span> 
+                        <span className="leading-relaxed">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {isDisabled ? (
+                    <div className="w-full py-4 text-center rounded-2xl text-slate-500 font-bold uppercase tracking-widest text-[10px] bg-slate-800/50">
+                      Configuration Pending
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => handleCheckout(plan.id)}
+                      disabled={checkingOut === plan.id}
+                      className="w-full text-center text-white font-medium hover:text-emerald-400 transition-colors py-2 flex items-center justify-center gap-2 group/btn"
+                    >
+                      {checkingOut === plan.id ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          Get {plan.name} 
+                          <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Auth Helper */}
+        {!user && (
+           <p className="text-center text-slate-500 text-[11px] font-black uppercase tracking-[0.2em] mt-16">
+             Not signed in?{' '}
+             <Link href="/signin" className="text-emerald-500 hover:text-emerald-400 transition-colors">Create a free account</Link>{' '}
+             to subscribe.
+           </p>
+        )}
+      </div>
+    </main>
   );
 }

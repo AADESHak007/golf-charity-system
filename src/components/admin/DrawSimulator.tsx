@@ -186,7 +186,7 @@ export function DrawSimulator() {
                               <CreditCard size={18} className="text-green-500" />
                               <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Prize Distributed</span>
                            </div>
-                           <span className="text-lg font-black text-slate-900">£{(simulation.total_prize_pool_pence / 100).toLocaleString()}</span>
+                           <span className="text-lg font-black text-slate-900">${(simulation.total_prize_pool_pence / 100).toLocaleString()}</span>
                         </div>
                      </div>
 
@@ -225,7 +225,7 @@ export function DrawSimulator() {
                           </div>
                        </div>
                        <div className="text-right">
-                          <p className="text-xs font-black text-slate-900 leading-none">£{(tier.pool / 100).toLocaleString()}</p>
+                          <p className="text-xs font-black text-slate-900 leading-none">${(tier.pool / 100).toLocaleString()}</p>
                           <p className="text-[9px] font-bold text-slate-400 uppercase">Pool Weight</p>
                        </div>
                     </div>
@@ -237,7 +237,7 @@ export function DrawSimulator() {
                         <Users size={16} className="text-indigo-400" />
                         <span className="text-[10px] font-black text-slate-500 uppercase">Total Pool Potential</span>
                      </div>
-                     <span className="text-xl font-black">£{(simulation.total_prize_pool_pence / 100).toLocaleString()}</span>
+                     <span className="text-xl font-black">${(simulation.total_prize_pool_pence / 100).toLocaleString()}</span>
                   </div>
                </div>
             </div>
@@ -264,7 +264,7 @@ export function DrawSimulator() {
                            </div>
                         </div>
                         <div className="text-right">
-                           <p className="text-lg font-black text-slate-900">£{(winner.prize_amount_pence / 100).toLocaleString()}</p>
+                           <p className="text-lg font-black text-slate-900">${(winner.prize_amount_pence / 100).toLocaleString()}</p>
                            <p className="text-[9px] font-bold text-green-500 uppercase tracking-widest">Potential Prize</p>
                         </div>
                      </div>

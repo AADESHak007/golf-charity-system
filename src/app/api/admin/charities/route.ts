@@ -6,7 +6,12 @@ export async function GET(req: NextRequest) {
   try {
     const { data: charities, error } = await supabaseServiceRole
       .from("charities")
-      .select("*")
+      .select(`
+        *,
+        supporters:user_charities (
+          count
+        )
+      `)
       .order("name", { ascending: true });
 
     if (error) throw error;

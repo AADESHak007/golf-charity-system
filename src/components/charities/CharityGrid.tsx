@@ -13,20 +13,20 @@ export const CharityGrid = ({ charities, loading }: CharityGridProps) => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-32 space-y-4">
-        <Loader2 className="w-12 h-12 text-orange-500 animate-spin" />
-        <p className="text-zinc-500 font-medium animate-pulse">Finding causes to support...</p>
+        <Loader2 className="w-12 h-12 text-slate-900 animate-spin" />
+        <p className="text-slate-400 font-bold uppercase tracking-[0.2em] italic text-[10px] animate-pulse">Finding causes to support...</p>
       </div>
     );
   }
 
   if (!charities || charities.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-32 px-6 text-center bg-zinc-900/50 border border-white/5 rounded-[3rem]">
-        <div className="p-6 bg-zinc-800 rounded-full mb-6">
-          <HeartOff className="w-12 h-12 text-zinc-600" />
+      <div className="flex flex-col items-center justify-center py-32 px-6 text-center bg-white border border-slate-100 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
+        <div className="p-6 bg-slate-50 rounded-full mb-6 border border-slate-100 shadow-sm">
+          <HeartOff className="w-12 h-12 text-slate-300" />
         </div>
-        <h3 className="text-2xl font-black text-white mb-2">No charities found</h3>
-        <p className="text-zinc-500 max-w-md mx-auto">
+        <h3 className="text-2xl font-serif italic tracking-tighter text-slate-900 mb-2">No charities found.</h3>
+        <p className="text-slate-500 max-w-md mx-auto italic">
           We couldn't find any charities matching your criteria. Try adjusting your search or filters.
         </p>
       </div>

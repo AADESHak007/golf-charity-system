@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseServiceRole } from "@/lib/supabase/service";
 import { ApiResponse } from "@/types";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const id = params.id;
-    const body = await req.json();
+    const params = await context.params;
+    const { id } = params;
+    const body = await request.json();
 
     const { data: charity, error } = await supabaseServiceRole
       .from("charities")
@@ -33,9 +34,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
-    const id = params.id;
+    const params = await context.params;
+    const { id } = params;
 
     const { error } = await supabaseServiceRole
       .from("charities")

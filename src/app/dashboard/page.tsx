@@ -13,9 +13,14 @@ import {
   ChevronRight,
   TrendingUp,
   Target,
-  Calendar
+  Calendar,
+  Sparkles,
+  Activity,
+  History,
+  Star
 } from 'lucide-react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function DashboardPage() {
   const [data, setData] = useState<any>({
@@ -62,46 +67,46 @@ export default function DashboardPage() {
     setData((prev: any) => ({ ...prev, scores: newScores }));
   };
 
-  // Stats Calculations
   const totalWonPence = data.winner
     ?.filter((w: any) => w.status === 'PAID')
     ?.reduce((acc: number, curr: any) => acc + (curr.draw_entry?.prize_amount_pence || 0), 0) || 0;
   
   const drawWins = data.winner?.length || 0;
-  const drawEntries = data.draws?.length || 0; // Simplified for demo
+  const drawEntries = data.draws?.length || 0; 
   
   const subAmount = data.subscription?.price_pence || 0;
   const totalCharityAllocation = data.charities?.reduce((acc: number, curr: any) => acc + (curr.allocation_perc || 0), 0) || 0;
-  // Simplified: (Sub amount * allocation %) * months (assuming 1 for now)
   const estimatedCharityContribution = (subAmount * totalCharityAllocation) / 100 / 100;
 
   const latestDraw = data.draws?.[0];
 
   return (
-    <div className="space-y-8 lg:space-y-12">
-      {/* Top Row: Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="space-y-12 pb-24 lg:pb-0">
+      
+      {/* Stat Cards based on image structure */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <OverviewCard
           loading={loading}
           title="Subscription"
+          variant="brand"
           value={data.subscription?.status === 'active' ? 'Active' : 'No Plan'}
-          subText={data.subscription?.current_period_end ? `Renews on ${new Date(data.subscription.current_period_end).toLocaleDateString()}` : 'Participate in draws'}
+          subText={data.subscription?.current_period_end ? `Renews shortly.` : 'Subscribe to win.'}
           icon={CreditCard}
-          color={data.subscription?.status === 'active' ? 'emerald' : 'amber'}
+          color={data.subscription?.status === 'active' ? 'accent' : 'rose'}
         />
         <OverviewCard
           loading={loading}
           title="Total Won"
-          value={`£${(totalWonPence / 100).toFixed(2)}`}
-          subText={`Across ${drawWins} claims`}
+          value={`$${(totalWonPence / 100).toFixed(2)}`}
+          subText={`Across ${drawWins} claims.`}
           icon={Trophy}
           color="blue"
         />
         <OverviewCard
           loading={loading}
-          title="Giving Impact"
-          value={`£${estimatedCharityContribution.toFixed(2)}`}
-          subText={`To ${data.charities?.length || 0} missions`}
+          title="Impact Summary"
+          value={`$${estimatedCharityContribution.toFixed(2)}`}
+          subText={`To ${data.charities?.length || 0} missions.`}
           icon={Heart}
           color="rose"
         />
@@ -109,101 +114,110 @@ export default function DashboardPage() {
           loading={loading}
           title="Participation"
           value={drawEntries}
-          subText={`${drawWins} wins recorded`}
+          subText={`${drawWins} wins recorded.`}
           icon={Ticket}
           color="amber"
         />
       </div>
 
-      {/* Middle Row: Main Banner + Latest Draw */}
+      {/* Main Grid: Asymmetrical as seen in image */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Main Banner - taking 8/12 of the space */}
         <div className="lg:col-span-8">
           <SubscriptionBanner 
             loading={loading}
             subscription={data.subscription}
-            scoreCount={data.scores?.length || 0}
-            onScoreAdded={handleScoreAdded}
+            onRefresh={fetchData}
           />
         </div>
-        <div className="lg:col-span-4">
+        
+        {/* Latest Draw - taking 4/12 */}
+        <div className="lg:col-span-4 max-h-[600px]">
           <RecentDrawCard 
             loading={loading}
             draw={latestDraw}
           />
         </div>
-      </div>
+        
+        {/* Left Column Section: Charities */}
+        <div className="lg:col-span-7">
+           <CharitySummaryCard 
+            loading={loading}
+            charities={data.charities}
+            subscriptionAmount={subAmount}
+          />
+        </div>
 
-      {/* Bottom Row: Charities + Score Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <CharitySummaryCard 
-          loading={loading}
-          charities={data.charities}
-          subscriptionAmount={subAmount}
-        />
-
-        <div className="bg-[#0f172a] border border-white/5 rounded-[2.5rem] p-8 lg:p-10 transition-all duration-300 relative overflow-hidden group shadow-2xl">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-3xl pointer-events-none" />
-            
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400">
-                        <Target className="w-5 h-5" />
+        {/* Right Column Section: Performance (Light Mode Redesign) */}
+        <div className="lg:col-span-5 h-full"> 
+            <div className="bg-white border border-slate-100 rounded-[3rem] p-10 lg:p-14 mb-10 transition-all duration-700 relative overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-2xl hover:shadow-slate-200/50 h-full flex flex-col justify-between">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[120px] pointer-events-none transition-all duration-1000 group-hover:opacity-10" />
+                
+                <div className="flex items-center justify-between mb-12">
+                    <div className="flex items-center gap-6">
+                        <div className="p-5 rounded-[1.5rem] bg-slate-50 text-accent border border-slate-100 shadow-sm transition-all group-hover:bg-slate-900 group-hover:text-white">
+                            <Activity className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500 mb-2 leading-none italic">Growth Engine</h3>
+                            <h4 className="text-2xl font-serif italic tracking-tighter text-slate-900 leading-none">Recent Round Scores.</h4>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-500 mb-1">Performance</h3>
-                        <h4 className="text-xl font-black tracking-tight text-white leading-none">Recent Scores</h4>
-                    </div>
+                    <Link 
+                        href="/dashboard/scores" 
+                        className="p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-slate-900 hover:text-white transition-all group/btn shadow-sm"
+                    >
+                        <ChevronRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-1" />
+                    </Link>
                 </div>
-                <Link 
-                    href="/dashboard/scores" 
-                    className="p-2 bg-white/5 border border-white/10 rounded-xl hover:bg-emerald-500/10 hover:border-emerald-500/20 transition-all group/btn"
-                >
-                    <ChevronRight className="w-5 h-5 text-gray-400 group-hover/btn:text-emerald-400 transition-colors" />
-                </Link>
-            </div>
 
-            <div className="space-y-4">
-                {data.scores?.length > 0 ? (
-                    data.scores.slice(0, 3).map((s: any, i: number) => (
-                        <div key={i} className="bg-white/5 border border-white/5 rounded-2xl p-5 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center">
-                                    <span className="text-xl font-black text-white">{s.score}</span>
-                                </div>
-                                <div>
-                                    <p className="text-xs font-black uppercase tracking-widest text-emerald-500">Stableford Points</p>
-                                    <div className="flex items-center gap-2 text-gray-500 mt-1">
-                                        <Calendar className="w-3 h-3" />
-                                        <span className="text-xs font-bold">{new Date(s.played_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                <div className="space-y-6 flex-1">
+                    {data.scores?.length > 0 ? (
+                        data.scores.slice(0, 3).map((s: any, i: number) => (
+                            <div key={i} className="bg-slate-50 border border-slate-100 rounded-[2rem] p-6 lg:p-8 flex items-center justify-between hover:bg-white hover:border-slate-200 transition-all duration-500 group/item shadow-sm hover:shadow-xl hover:shadow-slate-100/50">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-3xl font-serif italic text-slate-900 group-hover/item:text-accent transition-colors shadow-sm">
+                                        {s.score}
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-accent italic">Stableford Points</p>
+                                        <div className="flex items-center gap-2 text-slate-400">
+                                            <Calendar className="w-3.5 h-3.5" />
+                                            <span className="text-xs font-bold leading-none">{new Date(s.played_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <Sparkles className="w-5 h-5 text-accent opacity-0 group-hover/item:opacity-30 transition-opacity" />
+                            </div>
+                        ))
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center py-24 space-y-8 border-2 border-dashed border-slate-100 rounded-[2.5rem] bg-slate-50/50">
+                            <div className="w-20 h-20 rounded-full bg-white shadow-xl flex items-center justify-center text-slate-200">
+                                <Target className="w-10 h-10" />
+                            </div>
+                            <div className="space-y-2 px-12">
+                               <p className="text-base font-bold text-slate-900">Measure your game.</p>
+                               <p className="text-sm font-medium text-slate-400 italic">Submit your first round today to track growth.</p>
                             </div>
                         </div>
-                    ))
-                ) : (
-                    <div className="py-12 flex flex-col items-center justify-center text-center space-y-4">
-                        <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gray-700">
-                            <Target className="w-6 h-6" />
+                    )}
+                </div>
+                
+                {data.scores?.length > 0 && (
+                    <div className="mt-12 pt-10 border-t border-slate-100 flex items-center justify-between relative z-10">
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 leading-none italic">Verified Average</p>
+                            <p className="text-4xl font-serif italic text-slate-900 tracking-tighter">
+                                {(data.scores.reduce((a: any, b: any) => a + b.score, 0) / data.scores.length).toFixed(1)}
+                            </p>
                         </div>
-                        <p className="text-sm font-bold text-gray-500">Record your rounds to track performance.</p>
+                        <div className="flex items-center gap-3 px-6 py-3 bg-accent/10 border border-accent/20 rounded-full shadow-sm">
+                            <TrendingUp className="w-4 h-4 text-accent" />
+                            <span className="text-[10 px] font-black uppercase tracking-widest text-accent italic">Trending</span>
+                        </div>
                     </div>
                 )}
             </div>
-            
-            {data.scores?.length > 0 && (
-                <div className="mt-8 pt-8 border-t border-white/5 flex items-center justify-between">
-                    <div>
-                        <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-1">Season Average</p>
-                        <p className="text-lg font-black text-white">
-                            {(data.scores.reduce((a: any, b: any) => a + b.score, 0) / data.scores.length).toFixed(1)}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                        <TrendingUp className="w-4 h-4 text-emerald-400" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">On Target</span>
-                    </div>
-                </div>
-            )}
         </div>
       </div>
     </div>

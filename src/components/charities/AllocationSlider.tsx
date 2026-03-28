@@ -80,7 +80,7 @@ export const AllocationSlider = ({
             <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Allocation</span>
           </div>
           <p className="text-sm font-medium text-orange-500/80">
-            £{poundsAmount} <span className="text-zinc-600">/ month</span>
+            ${poundsAmount} <span className="text-zinc-600">/ month</span>
           </p>
         </div>
 

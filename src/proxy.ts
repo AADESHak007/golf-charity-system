@@ -58,45 +58,53 @@ export default async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/');
-  logger.info(`Proxy: ${request.method} ${request.nextUrl.pathname}`, { hasUser: !!user });
+  const pathname = request.nextUrl.pathname;
+  logger.info(`Proxy: ${request.method} ${pathname}`, { hasUser: !!user });
   
-  const protectedRoutes = [
-    '/dashboard',
-    '/api/auth/me',
-    '/api/scores',
-    '/api/draw',
-    '/api/subscriptions'
-  ];
+  const protectedRoutes = ['/dashboard', '/api/auth/me', '/api/scores', '/api/draw', '/api/subscriptions'];
+  const adminRoutes = ['/admin', '/api/admin'];
+  const pricingRoute = '/pricing';
 
-  const adminRoutes = [
-    '/admin',
-    '/api/admin'
-  ];
+  const isAdminPath = adminRoutes.some(path => pathname.startsWith(path));
+  const isProtectedPath = protectedRoutes.some(path => pathname.startsWith(path));
+  const isPricingPath = pathname.startsWith(pricingRoute);
 
-  const isAdminPath = adminRoutes.some(path => request.nextUrl.pathname.startsWith(path));
-  const isProtectedPath = protectedRoutes.some(path => request.nextUrl.pathname.startsWith(path));
-
-  // Admin Protection
-  if (isAdminPath) {
-    if (!user) {
-      if (isApiRoute) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-
-    // Role check logic
+  // Fetch role for authenticated users to handle redirects
+  let userRole: string | null = null;
+  if (user) {
     const { data: userData } = await supabase
       .from('users')
       .select('role')
       .eq('id', user.id)
       .single();
+    userRole = userData?.role || null;
+  }
 
-    if (userData?.role !== 'ADMIN') {
+  // 1. Admin Redirection Logic: Redirect Admins away from Player-only pages
+  if (user && userRole === 'ADMIN') {
+    if (isPricingPath || isProtectedPath) {
+      if (isApiRoute) return response; // Allow API access but redirect UI
+      // Don't redirect if it's an API route that might be shared (unlikely here but safe)
+      if (!isApiRoute) {
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
+    }
+  }
+
+  // 2. Access Control: Protect Admin routes
+  if (isAdminPath) {
+    if (!user) {
+      if (isApiRoute) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.redirect(new URL('/auth', request.url));
+    }
+
+    if (userRole !== 'ADMIN') {
       if (isApiRoute) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
 
-  // General Protection
+  // 3. Access Control: Protect Player routes
   if (!user && isProtectedPath) {
     if (isApiRoute) {
       return NextResponse.json(
@@ -106,8 +114,8 @@ export default async function proxy(request: NextRequest) {
     }
 
     const url = request.nextUrl.clone();
-    url.pathname = '/auth'; // ← our actual auth page
-    url.searchParams.set('redirectedFrom', request.nextUrl.pathname);
+    url.pathname = '/auth';
+    url.searchParams.set('redirectedFrom', pathname);
     return NextResponse.redirect(url);
   }
 

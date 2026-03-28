@@ -11,21 +11,23 @@ export default function CharitiesPage() {
   return (
     <div className="space-y-12">
       <header className="space-y-4">
-        <h1 className="text-4xl lg:text-5xl font-black text-white tracking-tight">
-          Select Charities
+        <h1 className="text-4xl lg:text-5xl font-serif italic text-slate-900 tracking-tighter">
+          Select Charities.
         </h1>
-        <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] italic">
             Choose up to 2 charities to support with your monthly subscription
         </p>
       </header>
 
-      <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-3xl p-8 flex items-start gap-6 shadow-2xl">
-          <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400">
+      <div className="group bg-slate-900 border border-slate-800 rounded-[2.5rem] p-8 flex items-start flex-col md:flex-row gap-6 hover:shadow-2xl hover:border-slate-700 hover:-translate-y-1 transition-all duration-500 cursor-default">
+          <div className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white group-hover:bg-white group-hover:text-slate-900 transition-colors shadow-inner shrink-0">
               <Info className="w-6 h-6" />
           </div>
-          <div className="space-y-2">
-              <p className="font-black text-emerald-400 uppercase tracking-widest text-xs">Rule Book</p>
-              <p className="text-sm text-gray-400 leading-relaxed font-medium max-w-2xl">You can select up to 2 charities. Your total allocation must be between 10% and 50% of your subscription price. You can change these at any time before the next draw.</p>
+          <div className="space-y-3">
+              <p className="font-black text-white/30 uppercase tracking-[0.4em] text-[10px] italic">Rule Book</p>
+              <p className="text-sm text-white/60 leading-relaxed font-medium max-w-3xl italic">
+                 You can select up to <span className="text-white font-bold tracking-tight">2 charities</span>. Your total allocation must be between <span className="text-white/80">10% and 50%</span> of your subscription price. You can change these at any time before the <span className="bg-white/10 text-white px-2 py-1 rounded-md font-black uppercase tracking-widest text-[9px] border border-white/5 shadow-sm ml-1 group-hover:bg-accent group-hover:border-accent transition-colors">next draw</span>.
+              </p>
           </div>
       </div>
 

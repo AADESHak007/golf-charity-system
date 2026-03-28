@@ -8,7 +8,9 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const search = searchParams.get('search') || '';
-    const status = searchParams.get('status') || '';
+    const status = searchParams.get('status') || 'all';
+
+    console.log(`[DEBUG] GET /api/admin/users - Search: "${search}" Status: "${status}"`);
 
     const offset = (page - 1) * limit;
 
@@ -24,19 +26,18 @@ export async function GET(req: NextRequest) {
         ),
         golf_scores (
           count
-        ),
-        user_charities (
-          count
         )
       `, { count: 'exact' });
+
+    // Apply Filters - Force reassignment and order
+    if (status && status !== 'all') {
+      console.log(`[DEBUG] Filtering by role: ${status}`);
+      query = query.eq('role', status);
+    }
 
     if (search) {
       query = query.or(`email.ilike.%${search}%,name.ilike.%${search}%`);
     }
-
-    // Role filtering or status filtering if needed
-    // However, status is tied to subscriptions. Supabase RLS or complex joins might be needed for direct filtering.
-    // Let's filter in query if possible or fetch and filter (pagination is tricky with that)
 
     const { data: users, count, error } = await query
       .range(offset, offset + limit - 1)

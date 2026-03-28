@@ -1,15 +1,15 @@
-import SignUpForm from '@/components/auth/SignUpForm';
+import OnboardingFlow from '@/components/auth/OnboardingFlow';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sign Up — GolfCharity',
-  description: 'Create your GolfCharity account and start contributing while competing for prizes.',
+  title: 'Join the Movement — GolfCharity',
+  description: 'Start your journey of impact and prize draws today.',
 };
 
 export default function SignUpPage() {
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <SignUpForm />
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-screen flex items-center justify-center">
+      <OnboardingFlow />
     </div>
   );
 }

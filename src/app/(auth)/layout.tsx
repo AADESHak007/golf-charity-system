@@ -6,19 +6,16 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-[#070b14]">
-      {/* Brand Panel */}
+    <div className="flex min-h-screen bg-[#050810] selection:bg-accent/30 selection:text-white">
+      {/* Brand Panel (left on large, hidden on small) */}
       <AuthBranding />
 
-      {/* Form Panel */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center relative">
-        {/* Background blobs for mobile/form side */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-            <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/20 rounded-full blur-[100px]" />
-            <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[100px]" />
-        </div>
+      {/* Form Panel (full on small, half on large) */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center relative min-h-screen">
+        {/* Subtle noise/texture overlay consistent with landing page */}
+        <div className="fixed inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/notebook.png')] z-0" />
         
-        <div className="relative z-10 w-full">
+        <div className="relative z-10 w-full py-12">
             {children}
         </div>
       </div>

@@ -49,7 +49,7 @@ export default function DrawDetailPage({ params }: { params: Promise<{ id: strin
 
   const exportWinnersCSV = () => {
     if (!winners.length) return;
-    const headers = ["Winner", "Email", "Match Count", "Prize (£)", "Status"].join(",");
+    const headers = ["Winner", "Email", "Match Count", "Prize ($)", "Status"].join(",");
     const rows = winners.map(w => [
        w.user?.name,
        w.user?.email,
@@ -154,7 +154,7 @@ export default function DrawDetailPage({ params }: { params: Promise<{ id: strin
          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm flex flex-col justify-between">
             <div>
                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Total Prize Pool</p>
-               <h4 className="text-3xl font-black text-slate-900 leading-none">£{(draw.total_prize_pool_pence / 100).toLocaleString()}</h4>
+               <h4 className="text-3xl font-black text-slate-900 leading-none">${(draw.total_prize_pool_pence / 100).toLocaleString()}</h4>
             </div>
             <div className="mt-8 pt-8 border-t border-slate-50 flex items-center gap-2 group">
                <CreditCard size={18} className="text-indigo-400 group-hover:translate-x-1 transition-transform" />
@@ -164,7 +164,7 @@ export default function DrawDetailPage({ params }: { params: Promise<{ id: strin
          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm flex flex-col justify-between">
             <div>
                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Jackpot Distributed</p>
-               <h4 className="text-3xl font-black text-slate-900 leading-none">£{(draw.jackpot_pool_pence / 100).toLocaleString()}</h4>
+               <h4 className="text-3xl font-black text-slate-900 leading-none">${(draw.jackpot_pool_pence / 100).toLocaleString()}</h4>
                {draw.jackpot_carried_over && <span className="text-[9px] font-black text-amber-500 uppercase">Rollover Recorded</span>}
             </div>
             <div className="mt-8 pt-8 border-t border-slate-50 flex items-center gap-2 group">
@@ -175,7 +175,7 @@ export default function DrawDetailPage({ params }: { params: Promise<{ id: strin
          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm flex flex-col justify-between">
             <div>
                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Common Tiers (2 & 3)</p>
-               <h4 className="text-3xl font-black text-slate-900 leading-none">£{((draw.tier2_pool_pence + draw.tier3_pool_pence) / 100).toLocaleString()}</h4>
+               <h4 className="text-3xl font-black text-slate-900 leading-none">${((draw.tier2_pool_pence + draw.tier3_pool_pence) / 100).toLocaleString()}</h4>
             </div>
             <div className="mt-8 pt-8 border-t border-slate-50 flex items-center gap-2 group">
                <Target size={18} className="text-indigo-400" />
@@ -241,7 +241,7 @@ export default function DrawDetailPage({ params }: { params: Promise<{ id: strin
                               </div>
                            </td>
                            <td className="px-8 py-5">
-                              <span className="text-base font-black text-slate-900">£{(winner.prize_amount_pence / 100).toLocaleString()}</span>
+                              <span className="text-base font-black text-slate-900">${(winner.prize_amount_pence / 100).toLocaleString()}</span>
                            </td>
                            <td className="px-8 py-5 text-center">
                               <div className={cn(

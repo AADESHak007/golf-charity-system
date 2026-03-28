@@ -37,7 +37,7 @@ export default function UsersManagementPage() {
       if (search) url.searchParams.set('search', search);
       if (status !== 'all') url.searchParams.set('status', status);
       
-      const res = await fetch(url.toString());
+      const res = await fetch(url.toString(), { cache: 'no-store' });
       const json = await res.json() as ApiResponse<{ users: any[], total: number }>;
       
       if (json.success && json.data) {

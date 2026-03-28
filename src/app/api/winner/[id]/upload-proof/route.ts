@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { supabaseServiceRole } from "@/lib/supabase/service";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, context: any) {
   try {
     const supabase = await createClient();
+    const params = await context.params;
     const verification_id = params.id;
 
     // 1. Auth check

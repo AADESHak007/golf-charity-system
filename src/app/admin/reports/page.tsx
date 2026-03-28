@@ -156,7 +156,7 @@ export default function ReportsPage() {
             </div>
             
             <div className="h-[300px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
+               <ResponsiveContainer width="99%" height="100%">
                   <AreaChart data={data.monthly_revenue} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                      <defs>
                         <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
@@ -166,14 +166,14 @@ export default function ReportsPage() {
                      </defs>
                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                      <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }} dy={10} />
-                     <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }} tickFormatter={(v) => `£${v/100}`} />
+                     <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }} tickFormatter={(v) => `$${v/100}`} />
                      <Tooltip 
                         content={({ active, payload }) => {
                           if (active && payload && payload.length) {
                              return (
                                <div className="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-800">
                                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{payload[0].payload.month}</p>
-                                  <p className="text-lg font-black leading-none">£{(Number(payload[0].value) / 100).toLocaleString()}</p>
+                                  <p className="text-lg font-black leading-none">${(Number(payload[0].value) / 100).toLocaleString()}</p>
                                </div>
                              );
                           }
@@ -195,7 +195,7 @@ export default function ReportsPage() {
             </div>
 
             <div className="h-[300px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
+               <ResponsiveContainer width="99%" height="100%">
                   <BarChart data={data.monthly_revenue} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                      <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }} dy={10} />
@@ -228,7 +228,7 @@ export default function ReportsPage() {
             </div>
 
             <div className="h-[350px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
+               <ResponsiveContainer width="99%" height="100%">
                   <BarChart data={data.score_distribution} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
                      <XAxis dataKey="score" axisLine={false} tickLine={false} tick={{ fill: '#ffffff50', fontSize: 10, fontWeight: 900 }} />
@@ -267,23 +267,30 @@ export default function ReportsPage() {
                <Heart className="text-rose-400" size={24} />
             </div>
             <div className="space-y-4">
-               {data.charity_contributions.map((c, i) => (
-                  <div key={i} className="flex items-center justify-between p-5 bg-slate-50 border border-slate-50 rounded-3xl hover:bg-white hover:border-slate-100 transition-all hover:shadow-xl group">
-                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center font-black text-slate-900 shadow-sm relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                           {c.charity_name.charAt(0)}
+               {data.charity_contributions.length > 0 ? (
+                  data.charity_contributions.map((c, i) => (
+                     <div key={i} className="flex items-center justify-between p-5 bg-slate-50 border border-slate-50 rounded-3xl hover:bg-white hover:border-slate-100 transition-all hover:shadow-xl group">
+                        <div className="flex items-center gap-4">
+                           <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center font-black text-slate-900 shadow-sm relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                              {c.charity_name.charAt(0)}
+                           </div>
+                           <div>
+                              <p className="text-sm font-black text-slate-900 leading-none mb-1 group-hover:text-indigo-600 transition-colors">{c.charity_name}</p>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{c.supporter_count} Active Patrons</p>
+                           </div>
                         </div>
-                        <div>
-                           <p className="text-sm font-black text-slate-900 leading-none mb-1 group-hover:text-indigo-600 transition-colors">{c.charity_name}</p>
-                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{c.supporter_count} Active Patrons</p>
+                        <div className="text-right">
+                           <p className="text-lg font-black text-slate-900">${(c.total_pence / 100).toLocaleString()}</p>
+                           <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest font-mono">Total Fund Value</p>
                         </div>
                      </div>
-                     <div className="text-right">
-                        <p className="text-lg font-black text-slate-900">£{(c.total_pence / 100).toLocaleString()}</p>
-                        <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest font-mono">Total Fund Value</p>
-                     </div>
+                  ))
+               ) : (
+                  <div className="py-16 flex flex-col items-center justify-center text-slate-300 bg-slate-50/50 rounded-3xl gap-4 italic font-medium">
+                     <Heart size={40} strokeWidth={1.5} className="text-slate-300 opacity-50" />
+                     <p>No active charity supporters matrix available.</p>
                   </div>
-               ))}
+               )}
             </div>
          </div>
 
@@ -306,7 +313,7 @@ export default function ReportsPage() {
                         </div>
                      </div>
                      <div className="text-right">
-                        <p className="text-lg font-black text-slate-900">£{(d.total_distributed_pence / 100).toLocaleString()}</p>
+                        <p className="text-lg font-black text-slate-900">${(d.total_distributed_pence / 100).toLocaleString()}</p>
                         <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest font-mono">Prize Pool Value</p>
                      </div>
                   </div>

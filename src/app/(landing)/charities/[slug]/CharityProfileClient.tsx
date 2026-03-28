@@ -71,22 +71,22 @@ export const CharityProfileClient = ({
 
   if (!isLoggedIn) {
     return (
-       <div className="p-10 bg-zinc-900 border border-white/5 rounded-[3.5rem] shadow-2xl space-y-8 text-center">
-          <div className="w-20 h-20 bg-zinc-950 rounded-[2rem] border border-white/5 mx-auto flex items-center justify-center shadow-xl">
-             <Lock className="w-8 h-8 text-zinc-700" />
+       <div className="p-10 bg-slate-900 border border-slate-800 rounded-[3.5rem] shadow-2xl space-y-8 text-center">
+          <div className="w-20 h-20 bg-slate-950 rounded-[2rem] border border-slate-800 mx-auto flex items-center justify-center shadow-xl">
+             <Lock className="w-8 h-8 text-slate-600" />
           </div>
           <div className="space-y-2">
-             <h3 className="text-2xl font-black text-white">Support Locked</h3>
-             <p className="text-sm font-medium text-zinc-500 leading-relaxed">
+             <h3 className="text-2xl font-serif italic text-white tracking-tighter">Support Locked.</h3>
+             <p className="text-[13px] font-medium text-slate-400 leading-relaxed italic">
                Please sign in to your Digital Heroes account to choose your supported causes.
              </p>
           </div>
           <button 
             onClick={() => router.push('/auth')}
-            className="w-full py-5 bg-orange-600 hover:bg-orange-500 text-white font-black uppercase tracking-widest rounded-[2rem] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 group"
+            className="w-full py-5 bg-white hover:bg-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[10px] rounded-[2rem] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 group"
           >
             Sign In to Select
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
        </div>
     );
@@ -94,55 +94,55 @@ export const CharityProfileClient = ({
 
   if (!isSubscribed) {
     return (
-       <div className="p-10 bg-zinc-900 border border-white/5 rounded-[3.5rem] shadow-2xl space-y-8 text-center">
-          <div className="w-20 h-20 bg-zinc-950 rounded-[2rem] border border-white/5 mx-auto flex items-center justify-center shadow-xl">
-             <CreditCard className="w-8 h-8 text-orange-500/50" />
+       <div className="p-10 bg-slate-900 border border-slate-800 rounded-[3.5rem] shadow-2xl space-y-8 text-center">
+          <div className="w-20 h-20 bg-slate-950 rounded-[2rem] border border-slate-800 mx-auto flex items-center justify-center shadow-xl">
+             <CreditCard className="w-8 h-8 text-slate-600" />
           </div>
           <div className="space-y-2">
-             <h3 className="text-2xl font-black text-white">Active Subscription Required</h3>
-             <p className="text-sm font-medium text-zinc-500 leading-relaxed">
+             <h3 className="text-2xl font-serif italic text-white tracking-tighter">Subscription Required.</h3>
+             <p className="text-[13px] font-medium text-slate-400 leading-relaxed italic">
                 Unlock charitable giving by becoming a Digital Heroes member. 10% to 50% of your fee goes directly to causes.
              </p>
           </div>
           <button 
             onClick={() => router.push('/dashboard')}
-            className="w-full py-5 bg-orange-600 hover:bg-orange-500 text-white font-black uppercase tracking-widest rounded-[2rem] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 group"
+            className="w-full py-5 bg-white hover:bg-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[10px] rounded-[2rem] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 group"
           >
             Upgrade to Support
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
        </div>
     );
   }
 
   return (
-    <div className="p-10 bg-zinc-900 border border-white/5 rounded-[3.5rem] shadow-2xl space-y-8 relative overflow-hidden group">
-       <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 blur-[60px] pointer-events-none rounded-full" />
+    <div className="p-10 bg-slate-900 border border-slate-800 rounded-[3.5rem] shadow-2xl space-y-8 relative overflow-hidden group">
+       <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[60px] pointer-events-none rounded-full" />
        
        <div className="space-y-2 relative z-10">
-          <h2 className="text-3xl font-black text-white tracking-tight leading-none">Impact Support</h2>
-          <p className="text-sm text-zinc-500 font-medium">Choose how much weight you give this mission.</p>
+          <h2 className="text-3xl font-serif italic tracking-tighter text-white leading-none">Impact Support.</h2>
+          <p className="text-[13px] text-slate-400 font-medium italic">Choose how much weight you give this mission.</p>
        </div>
 
-       <div className="h-px w-full bg-white/5" />
+       <div className="h-px w-full bg-slate-800" />
 
        <div className="relative z-10">
           {currentSupport ? (
             <div className="space-y-8">
-              <div className="p-8 rounded-[2.5rem] bg-emerald-500 border border-emerald-400 text-white space-y-4 text-center shadow-2xl shadow-emerald-500/20">
+              <div className="p-8 rounded-[2.5rem] bg-accent/10 border border-accent/20 text-accent space-y-4 text-center shadow-2xl">
                  <CheckCircle2 className="w-12 h-12 mx-auto mb-2" />
                  <div className="space-y-1">
-                    <h3 className="text-2xl font-black tracking-tight leading-none">Already Selection</h3>
-                    <p className="text-xs font-bold uppercase tracking-widest opacity-80">Supporting at {currentSupport.allocation_perc}%</p>
+                    <h3 className="text-2xl font-serif italic tracking-tighter leading-none text-white">Selected Process.</h3>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-80 mt-2">Supporting at {currentSupport.allocation_perc}%</p>
                  </div>
-                 <div className="h-px w-1/3 mx-auto bg-white/20 mt-4" />
-                 <p className="text-[10px] font-bold tracking-widest leading-relaxed uppercase opacity-70">
+                 <div className="h-px w-1/3 mx-auto bg-accent/20 mt-4" />
+                 <p className="text-[10px] text-slate-300 font-bold tracking-widest leading-relaxed uppercase opacity-70">
                     You're contributing to this mission in real-time. Manage your balance in the dashboard.
                  </p>
               </div>
               <Link 
                 href="/dashboard" 
-                className="w-full py-5 bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-black uppercase tracking-[0.2em] rounded-[2rem] border border-white/10 transition-all flex items-center justify-center gap-2"
+                className="w-full py-5 bg-slate-950 hover:bg-slate-800 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-[2rem] border border-slate-800 transition-all flex items-center justify-center gap-2"
               >
                 Go to Dashboard
                 <ExternalLink className="w-4 h-4" />
@@ -159,16 +159,16 @@ export const CharityProfileClient = ({
                      <span className="text-5xl font-black text-white">{allocation}%</span>
                      <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Allocation</span>
                   </div>
-                  <input
+                   <input
                     type="range"
                     min={10}
                     max={Math.min(50, remainingMax)}
                     step={5}
                     value={allocation}
                     onChange={(e) => setAllocation(parseInt(e.target.value))}
-                    className="w-full h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer accent-orange-500"
+                    className="w-full h-2 bg-slate-800 rounded-full appearance-none cursor-pointer accent-white"
                   />
-                  <div className="flex justify-between text-[10px] font-bold text-zinc-700 uppercase tracking-widest">
+                  <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                     <span>Min 10%</span>
                     <span>Max {Math.min(50, remainingMax)}%</span>
                   </div>
@@ -177,21 +177,21 @@ export const CharityProfileClient = ({
                {error && (
                  <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center gap-3">
                     <X className="w-4 h-4 text-rose-500" />
-                    <p className="text-xs font-bold text-rose-500 uppercase tracking-tight leading-tight">{error}</p>
+                    <p className="text-[10px] font-bold text-rose-500 uppercase tracking-tight leading-tight">{error}</p>
                  </div>
                )}
 
                <div className="flex gap-4">
                   <button
                     onClick={() => setIsAdding(false)}
-                    className="flex-shrink-0 p-5 rounded-[1.5rem] bg-zinc-950 text-zinc-500 hover:text-white border border-white/5 transition-colors"
+                    className="flex-shrink-0 p-5 rounded-[1.5rem] bg-slate-950 text-slate-500 hover:text-white border border-slate-800 transition-colors"
                   >
                     <X className="w-6 h-6" />
                   </button>
                   <button
                     onClick={handleAdd}
                     disabled={loading}
-                    className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white font-black uppercase tracking-widest rounded-[1.5rem] shadow-xl transition-all disabled:opacity-50"
+                    className="flex-1 py-5 bg-white hover:bg-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[10px] rounded-[1.5rem] shadow-xl transition-all disabled:opacity-50"
                   >
                     {loading ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : 'Confirm Selection'}
                   </button>
@@ -199,9 +199,9 @@ export const CharityProfileClient = ({
             </motion.div>
           ) : (
             <div className="space-y-8">
-               <div className="p-8 rounded-[2.5rem] bg-orange-500/5 border border-orange-500/10 space-y-4 text-center">
-                  <HeartPulse className="w-12 h-12 text-orange-500 fill-orange-500/20 mx-auto" />
-                  <p className="text-sm font-medium text-zinc-500 max-w-[240px] mx-auto leading-relaxed">
+               <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/10 space-y-4 text-center">
+                  <HeartPulse className="w-12 h-12 text-white fill-white/20 mx-auto" />
+                  <p className="text-[13px] italic font-medium text-slate-400 max-w-[240px] mx-auto leading-relaxed">
                      {currentCount >= 2 
                        ? "You've already reached your 2-charity limit. Manage your causes in the dashboard."
                        : "Support this charity by allocating part of your monthly contribution fee."}
@@ -211,15 +211,15 @@ export const CharityProfileClient = ({
                {currentCount < 2 ? (
                  <button
                   onClick={() => setIsAdding(true)}
-                  className="w-full h-24 bg-orange-600 hover:bg-orange-500 text-white font-black uppercase tracking-[0.2em] rounded-[2.5rem] shadow-2xl shadow-orange-500/20 transition-all active:scale-95 flex items-center justify-center gap-3 group"
+                  className="w-full h-24 bg-white hover:bg-slate-200 text-slate-900 font-black uppercase tracking-[0.2em] text-[10px] rounded-[2.5rem] shadow-2xl transition-all active:scale-95 flex items-center justify-center gap-3 group"
                  >
-                   <Plus className="w-6 h-6" />
+                   <Plus className="w-5 h-5 flex-shrink-0" />
                    Add to My Causes
                  </button>
                ) : (
                  <Link 
                    href="/dashboard" 
-                   className="w-full py-5 bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-black uppercase tracking-[0.2em] rounded-[2rem] border border-white/10 transition-all flex items-center justify-center gap-2"
+                   className="w-full py-5 bg-slate-950 hover:bg-slate-800 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-[2rem] border border-slate-800 transition-all flex items-center justify-center gap-2"
                  >
                    Manage My Causes
                    <ExternalLink className="w-4 h-4" />
@@ -230,10 +230,10 @@ export const CharityProfileClient = ({
        </div>
 
        <div className="pt-8 flex flex-col items-center gap-4 text-center relative z-10">
-          <div className="p-5 rounded-full bg-zinc-950 border border-white/5 text-orange-500 shadow-xl">
-             <HeartPulse className="w-8 h-8 fill-orange-500 animate-[pulse_3s_infinite]" />
+          <div className="p-5 rounded-full bg-slate-950 border border-slate-800 text-slate-400 shadow-xl">
+             <HeartPulse className="w-8 h-8 fill-slate-800 animate-[pulse_3s_infinite]" />
           </div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 leading-relaxed max-w-[220px]">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 leading-relaxed max-w-[220px]">
              Your choice directly funds this mission every single month.
           </p>
        </div>

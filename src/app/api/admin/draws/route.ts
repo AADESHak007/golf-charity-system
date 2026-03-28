@@ -15,9 +15,6 @@ export async function GET(req: NextRequest) {
         *,
         creator:users!created_by (
           name
-        ),
-        winner_count:draw_entries (
-          count
         )
       `, { count: 'exact' })
       .order('draw_date', { ascending: false })
@@ -25,13 +22,38 @@ export async function GET(req: NextRequest) {
 
     if (error) throw error;
 
+    if (draws && draws.length > 0) {
+      const drawIds = draws.map(d => d.id);
+      const { data: winnersData } = await supabaseServiceRole
+         .from("draw_entries")
+         .select("draw_id")
+         .in("draw_id", drawIds)
+         .gt("prize_amount_pence", 0);
+         
+      draws.forEach(d => {
+         d.winner_count = [{ count: winnersData?.filter(w => w.draw_id === d.id).length || 0 }];
+      });
+    }
+
+
+
+    const { data: summaryData } = await supabaseServiceRole
+      .from("draws")
+      .select("total_prize_pool_pence")
+      .eq("status", "published");
+
+    const total_lifetime_payouts_pence = (summaryData || []).reduce((sum, d) => sum + (d.total_prize_pool_pence || 0), 0);
+
     return NextResponse.json({
       success: true,
       data: {
         draws,
         total: count,
         page,
-        limit
+        limit,
+        stats: {
+          total_lifetime_payouts_pence
+        }
       }
     });
 

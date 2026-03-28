@@ -28,7 +28,7 @@ export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex-1 px-4 py-8 space-y-2">
+    <nav className="space-y-3">
       {menuItems.map((item) => {
         const isActive = pathname === item.href;
         const Icon = item.icon;
@@ -38,26 +38,37 @@ export function AdminNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden",
+              "flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-500 group relative overflow-hidden",
               isActive 
-                ? "bg-white/10 text-white shadow-lg" 
-                : "text-slate-400 hover:text-white hover:bg-white/5"
+                ? "bg-white/5 text-white shadow-xl border border-white/5" 
+                : "text-slate-500 hover:text-slate-100 hover:bg-white/5"
             )}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className={cn(
-                "p-2 rounded-lg transition-colors",
-                isActive ? "bg-indigo-500/20 text-indigo-400" : "bg-slate-800/50 group-hover:bg-slate-800 text-slate-400 group-hover:text-white"
+                "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500",
+                isActive 
+                  ? "bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 rotate-3" 
+                  : "bg-white/5 text-slate-500 group-hover:text-white group-hover:rotate-6 group-hover:bg-white/10"
               )}>
-                <Icon size={20} />
+                <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
               </div>
-              <span className="font-medium text-[15px]">{item.name}</span>
+              <span className={cn(
+                "text-[10px] font-black uppercase tracking-[0.2em] italic transition-all duration-500",
+                isActive ? "text-white" : "text-slate-500"
+              )}>
+                {item.name}
+              </span>
             </div>
+            
             {isActive && (
-              <ChevronRight size={16} className="text-white/50" />
+              <div className="relative z-10 p-1 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
+                <ChevronRight size={10} className="text-indigo-400" />
+              </div>
             )}
+            
             {isActive && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-indigo-500 rounded-r-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-500 rounded-r-3xl shadow-[0_0_12px_rgba(99,102,241,0.8)]" />
             )}
           </Link>
         );
@@ -68,10 +79,12 @@ export function AdminNav() {
 
 export function AdminSidebarFoot() {
   return (
-    <div className="p-4 border-t border-white/5">
-      <button className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all">
-        <LogOut size={20} />
-        <span className="font-medium">Sign Out</span>
+    <div className="pt-6 border-t border-white/5 group">
+      <button className="flex items-center gap-4 w-full px-6 py-4 text-slate-500 hover:text-white hover:bg-white/5 rounded-[2rem] transition-all duration-500 border border-transparent hover:border-white/5 group">
+        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 group-hover:text-white group-hover:rotate-12 transition-all duration-500">
+           <LogOut size={18} />
+        </div>
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] italic">Sign Out</span>
       </button>
     </div>
   );

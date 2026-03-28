@@ -70,18 +70,18 @@ export default function WinningsPage() {
   );
 
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-12 pb-24">
       <header className="space-y-4">
-        <h1 className="text-4xl lg:text-5xl font-black text-white tracking-tight">
-          Prize Winnings
+        <h1 className="text-4xl lg:text-5xl font-serif text-slate-900 italic tracking-tighter capitalize mb-4">
+          Prize Winnings.
         </h1>
-        <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">
+        <p className="text-xs font-black text-slate-400 uppercase tracking-[0.4em] italic mb-12 transition-all">
           Claim and track your monthly draw prizes
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div className="lg:col-span-8 space-y-12">
           {totalWinnings > 0 && (
             <WinnerBanner totalAmount={totalWinnings} />
           )}
@@ -89,7 +89,7 @@ export default function WinningsPage() {
           <WinningsHistory verifications={verifications} />
         </div>
 
-        <aside className="lg:col-span-1 space-y-8">
+        <aside className="lg:col-span-4 space-y-8">
           {activeProofRequest ? (
             <ProofUploadForm 
               verificationId={activeProofRequest.id}
@@ -97,28 +97,34 @@ export default function WinningsPage() {
               prizeAmount={activeProofRequest.draw_entry?.prize_amount_pence || 0}
             />
           ) : (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-8 text-center space-y-6">
-              <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto text-emerald-500 shadow-inner">
-                <SearchIcon className="w-10 h-10" />
+            <div className="bg-slate-900 border border-slate-800 rounded-[3rem] p-12 text-center space-y-8 relative overflow-hidden group shadow-2xl shadow-slate-200">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-[60px] pointer-events-none" />
+              <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto text-emerald-400 border border-white/10 group-hover:scale-110 transition-transform duration-700">
+                <SearchIcon className="w-12 h-12" />
               </div>
-              <div className="space-y-2">
-                <h4 className="text-2xl font-black text-white uppercase tracking-tighter leading-tight">All Settled</h4>
-                <p className="text-zinc-500 text-sm font-medium">Verify your scores after each draw to claim potential prizes.</p>
+              <div className="space-y-4">
+                <h4 className="text-3xl font-serif italic text-white tracking-tighter leading-tight">All Settled.</h4>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest leading-loose">Verify your scores after each draw to claim potential prizes.</p>
               </div>
             </div>
           )}
 
           {/* Tips / Info Sidebar Extra */}
-          <div className="p-8 bg-zinc-950/50 border border-zinc-800 rounded-3xl space-y-4">
-             <h5 className="text-xs font-black text-white uppercase tracking-widest">Verification Tips</h5>
-             <ul className="space-y-3">
-                <li className="flex gap-2 text-xs text-zinc-500">
-                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1 shrink-0" />
-                   <span>Ensure your scorecard screenshot clearly shows the course name, date, and verified signature.</span>
+          <div className="p-10 bg-slate-50 border border-slate-100 rounded-[3rem] space-y-8 shadow-sm hover:shadow-xl hover:shadow-slate-100/50 transition-all duration-700">
+             <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-emerald-500 shadow-sm">
+                   <AlertCircle className="w-5 h-5" />
+                </div>
+                <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic leading-none">Verification Tips</h5>
+             </div>
+             <ul className="space-y-6">
+                <li className="flex gap-4 group">
+                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity" />
+                   <span className="text-xs font-medium text-slate-500 leading-relaxed italic group-hover:text-slate-900 transition-all">Ensure your scorecard screenshot clearly shows the course name, date, and verified signature.</span>
                 </li>
-                <li className="flex gap-2 text-xs text-zinc-500">
-                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1 shrink-0" />
-                   <span>Payouts are typically processed within 5 business days after verification approval.</span>
+                <li className="flex gap-4 group">
+                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-1.5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity" />
+                   <span className="text-xs font-medium text-slate-500 leading-relaxed italic group-hover:text-slate-900 transition-all">Payouts are typically processed within 5 business days after verification approval.</span>
                 </li>
              </ul>
           </div>

@@ -2,18 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseServiceRole } from "@/lib/supabase/service";
 import { ApiResponse } from "@/types";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const verification_id = params.id;
-    const body = await req.json();
+    const params = await context.params;
+    const { id: verification_id } = params;
+    const body = await request.json();
     const { action, rejection_reason, payout_reference } = body;
-
-    // Get admin user from token (middleware checks it's admin)
-    const { data: { user: adminUser } } = await supabaseServiceRole.auth.getUser(); // This might not be right in service role context,
-                                                                                    // but we know it's admin if it passed middleware.
-                                                                                    // Better use a normal client for identifying admin.
-    
-    // Actually, middleware just checks role. Here we use service role for DB writes.
 
     let status = '';
     let payment_status = '';
@@ -51,8 +45,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     if (fetchError || !verification) throw fetchError || new Error("Record not found");
 
-    // 2. Perform updates in transaction-like way
-    // Update verification
+    // 2. Perform updates
     const { error: updateError } = await supabaseServiceRole
       .from("winner_verifications")
       .update(updateData)

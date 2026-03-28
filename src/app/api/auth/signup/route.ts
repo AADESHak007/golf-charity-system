@@ -19,16 +19,18 @@ export async function POST(request: Request) {
       );
     }
 
-    const { email, password, name, role } = result.data;
+    const { email, password, name, role, charityId, contributionPercentage } = result.data;
     const supabase = await createClient();
 
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           name,
           role,
+          charity_id: charityId,
+          contribution_percentage: contributionPercentage,
         },
       },
     });
@@ -39,6 +41,24 @@ export async function POST(request: Request) {
         { success: false, error: error.message },
         { status: 400 }
       );
+    }
+
+    // Persist chosen charity & percentage to user_charities right away if userId is available
+    // Note: If email confirmation is required, signUpData.user might not contain the ID yet
+    // depending on Supabase settings. If auto-confirm is on, it's there.
+    if (signUpData.user && charityId) {
+       try {
+         await supabase
+           .from('user_charities')
+           .insert({
+             user_id: signUpData.user.id,
+             charity_id: charityId,
+             allocation_perc: contributionPercentage
+           });
+         logger.info('Charity selection saved for user', { userId: signUpData.user.id });
+       } catch (err) {
+         logger.error('Failed to save charity selection during signup', err);
+       }
     }
 
     logger.info('Signup successful for', email);

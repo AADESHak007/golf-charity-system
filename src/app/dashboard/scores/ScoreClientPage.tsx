@@ -73,8 +73,8 @@ export const ScoreClientPage = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-        <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Syncing scoreboard...</p>
+        <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
+        <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] italic">Syncing scoreboard...</p>
       </div>
     );
   }
@@ -94,24 +94,24 @@ export const ScoreClientPage = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-2xl mx-auto mt-12 p-12 bg-zinc-900 border border-zinc-800 rounded-[3rem] text-center space-y-8"
+        className="max-w-2xl mx-auto mt-12 p-12 bg-slate-900 border border-slate-800 shadow-2xl rounded-[3rem] text-center space-y-8"
       >
-        <div className="w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto text-emerald-500 shadow-inner">
-          <Lock className="w-12 h-12" />
+        <div className="w-24 h-24 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center mx-auto text-white shadow-inner">
+          <Lock className="w-10 h-10" />
         </div>
         <div className="space-y-4">
-          <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tighter uppercase leading-tight">Subscriber Exclusive</h2>
-          <p className="text-zinc-500 text-lg max-w-sm mx-auto font-medium">
+          <h2 className="text-4xl lg:text-5xl font-serif italic text-white tracking-tighter leading-tight">Subscriber Exclusive.</h2>
+          <p className="text-white/40 text-[13px] max-w-sm mx-auto font-medium leading-relaxed italic">
             Only active subscribers can track and manage their rolling-5 golf score history.
           </p>
         </div>
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-3 px-10 py-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-2xl shadow-emerald-500/20 active:scale-95 group"
+          className="inline-flex items-center justify-center gap-4 w-full max-w-sm px-10 py-5 bg-white hover:bg-slate-200 text-slate-900 font-black text-[10px] uppercase tracking-[0.2em] rounded-[1.5rem] transition-all shadow-xl shadow-black/20 group"
         >
-          <CreditCard className="w-6 h-6" />
+          <CreditCard className="w-5 h-5 flex-shrink-0" />
           <span>Subscribe Now</span>
-          <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </motion.div>
     );
@@ -120,13 +120,13 @@ export const ScoreClientPage = () => {
   return (
     <div className="space-y-12 pb-24">
       <div className="flex flex-col items-center gap-4">
-          <div className="h-1 lg:w-32 bg-emerald-500/20 rounded-full overflow-hidden">
+          <div className="h-1 lg:w-32 bg-slate-100 rounded-full overflow-hidden">
              <div 
-                className="h-full bg-emerald-500 transition-all duration-1000" 
+                className="h-full bg-slate-900 transition-all duration-1000" 
                 style={{ width: `${(scores.length / 5) * 100}%` }}
              />
           </div>
-          <h3 className="text-center text-sm font-black text-zinc-500 uppercase tracking-widest">
+          <h3 className="text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] italic">
             {scores.length} of 5 scores entered
           </h3>
       </div>

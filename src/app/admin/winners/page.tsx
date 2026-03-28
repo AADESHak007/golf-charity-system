@@ -78,7 +78,7 @@ export default function WinnersPage() {
   };
 
   const exportCSV = () => {
-    const headers = ["User", "Email", "Prize Amount (£)", "Status", "Date"].join(",");
+    const headers = ["User", "Email", "Prize Amount ($)", "Status", "Date"].join(",");
     const rows = verifications.map(v => {
       const prize = (v.draw_entry?.prize_amount_pence || 0) / 100;
       return [

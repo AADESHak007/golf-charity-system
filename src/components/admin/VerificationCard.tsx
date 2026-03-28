@@ -79,7 +79,7 @@ export function VerificationCard({ verification, onAction }: VerificationCardPro
           </div>
           <div className="text-right">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Prize Amount</span>
-            <span className="text-2xl font-black text-slate-900">£{prizeInPounds.toLocaleString()}</span>
+            <span className="text-2xl font-black text-slate-900">${prizeInPounds.toLocaleString()}</span>
           </div>
         </div>
 
